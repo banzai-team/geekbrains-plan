@@ -61,9 +61,9 @@ jobs:
           YANDEX_AUTH_KEY: ${{ secrets.YANDEX_AUTH_KEY }}
       - run: |
           echo "Packaging docker image ..."
-          tag="$DOCKER_REGISTRY/level-frontend:${{ github.sha }}"
+          tag="$DOCKER_REGISTRY/geekbrains-frontend:${{ github.sha }}"
           docker build -t $tag .
           docker push $tag
         env:
-          DOCKER_REGISTRY: cr.yandex/crp6hfvvdlm0ddass92t
+          DOCKER_REGISTRY: cr.yandex/crpq1hjt5vn1sf4s6j1b
 

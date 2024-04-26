@@ -1,0 +1,18 @@
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+  location / {
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html;
+
+        sub_filter </head>
+                 '<script data-script="config-overwrites">
+                 window.API_URL = "$API_URL";
+                 window.KEYCLOAK_CLIENT_ID = "$KEYCLOAK_CLIENT_ID";
+                 window.KEYCLOAK_AUTHORITY = "$KEYCLOAK_AUTHORITY";
+                 </script></head>';
+         sub_filter_once on;
+    }
+}
