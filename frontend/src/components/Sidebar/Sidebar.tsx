@@ -40,6 +40,7 @@ const Sidebar: React.FC = () => {
                                     <NavLink
                                         to={item.link}
                                         // isActive={true}
+                                        // activeClassName="bg-zinc-950"
                                         className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
 
                                         // className={({ isActive }: {isActive: any}) => isActive ? "bg-zinc-950" : "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"}

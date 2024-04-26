@@ -6,11 +6,24 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {Routes} from "~/pages/Router";
 import {MoveLeft} from "lucide-react";
+import Breadcrumbs from "~/components/Breadcrumbs";
 
 const Page404: React.FC = () => {
   return (
     <>
       <Head title="The page is not found" />
+        <Breadcrumbs
+            path={[
+                {
+                    text: "Главная",
+                    link: Routes.Root
+                },
+                {
+                    text: "404",
+                    link: Routes.Root
+                },
+            ]}
+        />
       <Card>
         <CardContent>
           <Empty text="Такой страницы не существует">
