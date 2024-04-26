@@ -18,4 +18,5 @@ def create_task(request_id, task_time, msg):
         "request_id": request_id,
         "started_at": datetime.datetime.now()
     })
+    print(msg)
     return True
