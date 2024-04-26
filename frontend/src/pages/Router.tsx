@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Outlet, RouteObject, useRoutes, BrowserRouter } from 'react-router-dom';
 import MainView from "~/components/MainView";
+import {Spinner} from "~/components/ui/spinner";
 
-const Loading = () => <p className="p-4 w-full h-full text-center">Loading...</p>;
+const Loading = () => <p className="p-4 w-full h-full text-center"><Spinner/></p>;
 
 const IndexScreen = lazy(() => import('~/pages/Index'));
 const Page404Screen = lazy(() => import('~/pages/404'));
