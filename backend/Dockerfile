@@ -25,6 +25,5 @@ FROM base
 COPY ./app ./app/
 COPY ./prisma ./prisma
 
-RUN prisma init --schema ./prisma/prisma.schema
+# RUN prisma init --schema ./prisma/prisma.schema
 RUN prisma generate --schema ./prisma/prisma.schema
-RUN prisma push --schema ./prisma/prisma.schema
