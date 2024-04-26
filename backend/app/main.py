@@ -32,6 +32,7 @@ def healthcheck():
 @app.post("/do_work")
 def do_work(request: ModelRequest):
     worker.create_task(1, request.duration, request.msg)
+    return True
 
 
 @app.on_event("startup")
