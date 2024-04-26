@@ -8,14 +8,16 @@ import torch
 from .dict import courses_grouped
 
 import yaml
-from app.config import device
+from app.config import device, MODEL_PATH
 
 data = yaml.safe_load(courses_grouped)
 
-model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
+# model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
-lm = models.Transformers(
-    model_name_or_path,
+lm = models.LlamaCpp(MODEL_PATH)
+
+model = models.Transformers(
+    MODEL_PATH,
     device_map="auto",
     load_in_8bit=True,
     _attn_implementation='sdpa'
@@ -23,7 +25,7 @@ lm = models.Transformers(
 
 pipeline = transformers.pipeline(
     "text-generation",
-    model=model_name_or_path,
+    model=model,
     model_kwargs={"torch_dtype": torch.bfloat16},
     device=device,
 )

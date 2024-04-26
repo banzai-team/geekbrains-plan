@@ -20,3 +20,4 @@ bitsandbytes
 accelerate
 pandas
 numpy
+llama-cpp-python
