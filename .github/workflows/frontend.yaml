@@ -45,6 +45,32 @@ jobs:
           path: ./frontend/build.zip
           name: build.zip
 
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # When application is successfully tested and build has been generated
+    # Then we can start with deployment
+    needs: build
+    steps:
+      # Download previously shared build
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build.zip
+      - uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq build.zip -d dist
+      # Set the credentials from repository settings/secrets
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_ENDPOINT: https://storage.yandexcloud.net/
+          AWS_S3_BUCKET: geekbrains.banzai-predict.com
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: 'frontend/dist/out'      # optional: defaults to entire repository
+
   build-container:
     if: github.ref == 'refs/heads/main'
     needs:
