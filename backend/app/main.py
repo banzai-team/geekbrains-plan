@@ -1,13 +1,37 @@
 import uvicorn
+from pydantic import BaseModel
+
 from app.db import prisma
 from fastapi import FastAPI
+from app.worker import worker
 
 app = FastAPI()
-app.include_router(graphql_app, prefix="/gql")
 
-@app.get("/")
+
+class HealthCheck(BaseModel):
+    """Response model to validate and return when performing a health check."""
+
+    status: str = "OK"
+
+
+class ModelRequest(BaseModel):
+    msg: str
+    duration: int
+
+
+@app.get("/ping")
 def ping():
     return {"ping": "pong"}
+
+
+@app.get("/hc")
+def healthcheck():
+    return HealthCheck(status="OK")
+
+
+@app.post("/do_work")
+def do_work(request: ModelRequest):
+    worker.create_task(1, request.duration, request.msg)
 
 
 @app.on_event("startup")
