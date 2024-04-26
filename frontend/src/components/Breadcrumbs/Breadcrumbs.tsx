@@ -10,7 +10,7 @@ import {
 import { Link } from 'react-router-dom';
 
 type BreadcrumbsProps = {
-  path: { name: string; link: string }[];
+  path: { text: string; link: string }[];
 };
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ path }) => {

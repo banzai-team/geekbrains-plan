@@ -29,7 +29,7 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
     navigate(`${Routes.Vacancy}/${id}`);
   };
 
-  const onDelete = (event, id) => {
+  const onDelete = (event: any, id: string) => {
     event.stopPropagation();
     event.preventDefault();
     console.log('delete ', id);
