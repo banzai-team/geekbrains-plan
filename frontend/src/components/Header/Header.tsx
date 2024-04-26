@@ -1,4 +1,4 @@
-import { Home, LineChart, Package, BookOpenCheck, PanelLeft, Search, ShoppingCart, Users2 } from 'lucide-react';
+import { BookOpenCheck, PanelLeft } from 'lucide-react';
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -8,19 +8,12 @@ import {
     // BreadcrumbSeparator,
 } from '~/components/ui/breadcrumb';
 import { Button } from '~/components/ui/button';
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from '~/components/ui/dropdown-menu';
-// import { Input } from '~/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '~/components/ui/sheet';
 import { menuItems } from '~/components/Sidebar/Sidebar';
 
 import React from 'react';
+import {Routes} from "~/pages/Router";
+import {Link} from "react-router-dom";
 
 const Header: React.FC = () => {
     return (
@@ -58,7 +51,7 @@ const Header: React.FC = () => {
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <a href="#">Dashboard</a>
+                            <Link href={Routes.Root}>Главная</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                 </BreadcrumbList>
