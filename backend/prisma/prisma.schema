@@ -1,0 +1,23 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:database.db"
+}
+
+// generator
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+}
+
+model ModelRequest {
+    id              Int     @id @default(autoincrement())
+    request            String
+    performed_at       DateTime
+}
+
+model ModelResponse {
+    id Int @id @default(autoincrement())
+    request_id Int
+    started_at      DateTime?
+    finished_at     DateTime?
+}
