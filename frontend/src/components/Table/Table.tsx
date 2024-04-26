@@ -39,11 +39,10 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Вакансия</TableHead>
-          <TableHead className="hidden sm:table-cell">Статус</TableHead>
-          <TableHead className="text-right">Цена</TableHead>
-        </TableRow>
+        <TableHead>Вакансия</TableHead>
+        <TableHead className="hidden sm:table-cell">Статус</TableHead>
+        <TableHead className="text-right">Цена</TableHead>
+        <TableHead className="text-right" />
       </TableHeader>
       <TableBody>
         {data.map((item) => (

@@ -39,17 +39,7 @@ const Sidebar: React.FC = () => {
                                 <TooltipTrigger asChild>
                                     <NavLink
                                         to={item.link}
-                                        // isActive={true}
-                                        // activeClassName="bg-zinc-950"
-                                        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-
-                                        // className={({ isActive }: {isActive: any}) => isActive ? "bg-zinc-950" : "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"}
-                                        // className={({ isActive, isPending, isTransitioning }) =>
-                                        //     [
-                                        //         "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
-                                        //         isActive ? "bg-zinc-950" : "",
-                                        //     ].join(" ")
-                                        // }
+                                        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-primary md:h-8 md:w-8 aria-[current=page]:bg-primary/15 aria-[current=page]:pointer-events-none aria-[current=page]:text-foreground"
                                     >
                                         {item.icon}
                                         <span className="sr-only">{item.text}</span>
