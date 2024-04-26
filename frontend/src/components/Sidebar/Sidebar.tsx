@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
                                 <TooltipTrigger asChild>
                                     <NavLink
                                         to={item.link}
-                                        isActive={true}
+                                        // isActive={true}
                                         className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
 
                                         // className={({ isActive }: {isActive: any}) => isActive ? "bg-zinc-950" : "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"}
