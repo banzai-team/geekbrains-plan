@@ -2,14 +2,14 @@ name: Backend Python CI workflow
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'backend/**'
-      - '.github/workflows/backend.yaml'
+#    paths:
+#      - 'backend/**'
+#      - '.github/workflows/backend.yaml'
     branches:
       - main
-  pull_request:
-    paths:
-      - 'backend/**'
+#  pull_request:
+#    paths:
+#      - 'backend/**'
 jobs:
   deploy-container:
     if: github.ref == 'refs/heads/main'

@@ -2,14 +2,14 @@ name: ML Python CI workflow
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'ml/**'
-      - '.github/workflows/ml.yaml'
+#    paths:
+#      - 'ml/**'
+#      - '.github/workflows/ml.yaml'
     branches:
       - main
-  pull_request:
-    paths:
-      - 'ml/**'
+#  pull_request:
+#    paths:
+#      - 'ml/**'
 jobs:
   deploy-container:
     if: github.ref == 'refs/heads/main'
