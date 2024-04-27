@@ -101,12 +101,17 @@ def model_invocation(ser: str) -> str:
     edu_courses = course["edu_courses"]
     simular_courses = course["simular_courses"]
 
+    print(course)
     # course = json.dumps({"data": [0,1,2]})
     prisma.prisma_client.modelresponse.update(where={
         "id": response_to_save.id
     },
     data = {
-        "finished_at": datetime.datetime.now()
+        "finished_at": datetime.datetime.now(),
+        "course_coverage": course["course_coverage"] if "course_coverage" in course else None,
+        "meta": json.dumps({
+            "skills_need": course["skills_need"] if "course_coverage" in course else []
+        })
     })
 
     for course in edu_courses:
