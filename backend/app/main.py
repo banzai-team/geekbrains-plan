@@ -85,11 +85,6 @@ def plan_for_pdf(file: UploadFile, response: Response):
         file.file.close()
 
 
-@app.on_event("startup")
-def startup() -> None:
-    prisma.prisma_client.connect()
-
-
 @app.on_event("shutdown")
 def shutdown() -> None:
     prisma.prisma_client.disconnect()

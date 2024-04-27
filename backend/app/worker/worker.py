@@ -77,16 +77,18 @@ def model_invocation(vacancy_ser: str) -> int:
     }
 
     request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
+    print(request_to_save)
     response_to_save = {
-        "request_id": request_to_save["id"],
+        "request_id": request_to_save.id,
         "started_at": datetime.datetime.now()
     }
     response_to_save = prisma.prisma_client.modelresponse.create(response_to_save)
-    response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
+    # response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
-    course = response.json().result
+    # course = response.json().result
+    course = json.dumps({"data": [0,1,2]})
     prisma.prisma_client.modelresponse.update(where={
-        "id": response_to_save["id"]
+        "id": response_to_save.id
     },
     data = {
         "response": course,
