@@ -124,7 +124,7 @@ def narrow(sample_text: str) -> dict[str, list[Any] | Any]:
 
         for i in range(len(result_edu_course_skills)):
             skills_need += [{
-                'name': result_edu_course_skills[i]['name'],
+                'skill_name': result_edu_course_skills[i]['name'],
                 'requirement': int(skills_output[f'skill_{i}']) - 2,
             }]
         course_coverage = int(skills_output['course_coverage']) / MAX_RATING

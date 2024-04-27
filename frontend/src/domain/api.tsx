@@ -22,10 +22,6 @@ const ModelsQuery = gql`
                         id
                         name
                         price
-                        quarter {
-                            id
-                            title
-                        }
                         speciality
                         tag
                         url

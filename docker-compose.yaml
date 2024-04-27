@@ -3,7 +3,7 @@ version: '3.9'
 services:
   frontend:
     build: ./frontend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend:${VERSION}
     ports:
       - 5173:5173
     environment:
@@ -11,7 +11,7 @@ services:
 
   web:
     build: ./backend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     ports:
       - 4000:8000
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
@@ -28,7 +28,7 @@ services:
 
   prisma-migrate:
     build: ./backend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
     command: >
@@ -48,7 +48,7 @@ services:
 
   worker:
     build: ./backend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     command: celery -A app.worker.worker worker --loglevel=info
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -63,7 +63,7 @@ services:
 
   flower:
     build: ./backend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     ports:
       - 5555:5555
     command: celery -A app.worker.worker flower --loglevel=info
@@ -87,7 +87,7 @@ services:
     restart: always
 
   ml-llm:
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml:${VERSION}
     build:
       context: ./ml/
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
