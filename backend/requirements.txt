@@ -86,6 +86,4 @@ bs4
 langchain_community
 yarl==1.9.4
 python-multipart
-playwright
-fake_useragent
 trafilatura

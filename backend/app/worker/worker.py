@@ -4,10 +4,8 @@ import os
 from collections import namedtuple
 
 import requests
-from bs4 import BeautifulSoup
 from celery import Celery
 from celery import chain
-from langchain_community.document_loaders import AsyncHtmlLoader, AsyncChromiumLoader
 from langchain_community.document_loaders import PyPDFLoader
 import trafilatura
 
@@ -83,23 +81,3 @@ def parse_html(html: str) -> str:
     text = trafilatura.extract(downloaded)
 
     return text
-    # loader = AsyncHtmlLoader([html])
-    # loader = AsyncChromiumLoader([html])
-    # html = loader.load()
-
-    soup = BeautifulSoup(html[0].page_content, 'html.parser')
-
-    # Remove all tags except 'text' and 'div'
-    for tag in soup.find_all(True):
-        if tag.name not in ['p', 'ul', 'li', 'div'] + [f"h{i}" for i in range(1, 6)]:
-            tag.unwrap()
-
-    for tag in soup.find_all(True):
-        tag.attrs = {}
-        if not tag.get_text(strip=True):
-            tag.decompose()
-
-    sample_text = str(soup.text)
-    sample_text = '\n'.join(line.strip() for line in sample_text.split('\n') if len(line.strip()) > 0)
-
-    return sample_text
