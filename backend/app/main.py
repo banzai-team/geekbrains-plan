@@ -86,13 +86,13 @@ def plan_for_pdf(file: UploadFile, response: Response):
 
 
 @app.on_event("startup")
-async def startup() -> None:
-    await prisma.prisma_client.connect()
+def startup() -> None:
+    prisma.prisma_client.connect()
 
 
 @app.on_event("shutdown")
-async def shutdown() -> None:
-    await prisma.prisma_client.disconnect()
+def shutdown() -> None:
+    prisma.prisma_client.disconnect()
 
 
 if __name__ == "__main__":

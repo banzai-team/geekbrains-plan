@@ -10,7 +10,7 @@ if __name__ == "__main__":
     prices_file = 'calculate.json'
 
     
-    res = asyncio.get_event_loop().run_until_complete(prisma.prisma_client.connect())
+    res = prisma.prisma_client.connect()
 
     programs = {}
     modules = {}
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             to_save["price"] = prices["program_price"]
             to_save["days_amount"] = prices["days_amount"]
 
-        res = asyncio.get_event_loop().run_until_complete(prisma.prisma_client.program.create(to_save))
+        res = prisma.prisma_client.program.create(to_save)
         if program_id in modules:
             for i, module in enumerate(modules[program_id]):
                 quarter_to_save = {
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                         "id": int(program_id)
                     }
                 }} 
-                res = asyncio.get_event_loop().run_until_complete(prisma.prisma_client.module.create(quarter_to_save))
+                res = prisma.prisma_client.module.create(quarter_to_save)
                 
         if program_id in quarters:
             for i, quarter in enumerate(quarters[program_id]):
@@ -78,9 +78,9 @@ if __name__ == "__main__":
                         "id": int(program_id)
                     }
                 }} 
-                res = asyncio.get_event_loop().run_until_complete(prisma.prisma_client.quarter.create(quarter_to_save))
+                res = prisma.prisma_client.quarter.create(quarter_to_save)
 
-    asyncio.get_event_loop().run_until_complete(prisma.prisma_client.disconnect())
+    prisma.prisma_client.disconnect()
     print('saved')
 
         

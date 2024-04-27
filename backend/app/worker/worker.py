@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import json
 import logging
@@ -16,10 +17,11 @@ logger.setLevel(logging.DEBUG)
 
 from app.config.config import ML_SERVICE_URL
 
+prisma.prisma_client.connect()
+
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
-
 
 @celery.task(name="create_text_workflow")
 def plan_for_text(text: str):
@@ -74,7 +76,7 @@ def model_invocation(vacancy_ser: str) -> int:
         "performed_at": datetime.datetime.now()
     }
 
-    prisma.prisma_client.modelrequest.create(request_to_save)
+    request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
     response_to_save = {
         "request_id": request_to_save["id"],
         "started_at": datetime.datetime.now()
