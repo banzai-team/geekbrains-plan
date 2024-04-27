@@ -13,12 +13,12 @@ const AddFormPage: React.FC = () => {
     const navigate = useNavigate();
     const sendFile = useMutation(uploadFile, {
         onSuccess: (data) => {
-            navigate(`${Routes.Vacancy}/${data.data.id}`);
+            navigate(`${Routes.Vacancy}/${data.data.requestId}`);
         }
     });
     const sendLink = useMutation(uploadLink, {
         onSuccess: (data) => {
-            navigate(`${Routes.Vacancy}/${data.data.taskId}`);
+            navigate(`${Routes.Vacancy}/${data.data.requestId}`);
         }
     });
 

@@ -13,6 +13,28 @@ const ModelsQuery = gql`
                 eduCourses {
                     id
                 }
+                simularCourses {
+                    id
+                    matchScore
+                    program {
+                        daysAmount
+                        difficulty
+                        id
+                        name
+                        price
+                        quarter {
+                            id
+                            title
+                        }
+                        speciality
+                        tag
+                        url
+                        modules {
+                            id
+                            title
+                        }
+                    }
+                }
             }
             source
             sourceType
@@ -29,6 +51,28 @@ const ModelQuery = gql`
                 eduCourses {
                     id
                 }
+                simularCourses {
+                    id
+                    matchScore
+                    program {
+                        daysAmount
+                        difficulty
+                        id
+                        name
+                        price
+                        quarter {
+                            id
+                            title
+                        }
+                        speciality
+                        tag
+                        url
+                        modules {
+                            id
+                            title
+                        }
+                    }
+                }
             }
             source
             sourceType
@@ -43,7 +87,7 @@ export async function getRequests() {
 }
 
 export async function getRequest(id: string) {
-  const response = await request<{ modelRequest: any }>(`${config.apiUrl}/graphql`, ModelQuery, {id});
+  const response = await request<{ modelRequest: any }>(`${config.apiUrl}/graphql`, ModelQuery, {id: Number.parseInt(id)});
   return response.modelRequest;
 }
 
