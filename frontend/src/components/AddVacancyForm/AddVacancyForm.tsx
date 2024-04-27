@@ -40,7 +40,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
                 ? (
                     <div className="flex flex-row gap-4">
                       <div
-                          style={{ backgroundImage: 'url("/public/round.svg")'}}
+                          style={{ backgroundImage: 'url(/public/round.svg)'}}
                           className="bg-center bg-no-repeat bg-cover relative p-4 flex h-36 w-40 flex-col items-center justify-center rounded-md bg-zinc-100 md:p-10 md:h-48"
                       >
                         <Button className="absolute top-1 right-0" variant="ghost" size="sm" onClick={() => formik.setFieldValue("files", null)}>
