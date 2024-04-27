@@ -111,7 +111,11 @@ def model_invocation(ser: str) -> str:
 
     for course in edu_courses:
         course = prisma.prisma_client.outputcleducourse.create({
-            "edu_course": course,
+            "program": {
+                "connect": {
+                    "id": int(course)
+                }
+            },
             "response": {
                 "connect": {
                     "id": int(response_to_save.id)
@@ -122,7 +126,11 @@ def model_invocation(ser: str) -> str:
     for simular_course in simular_courses:
         course = prisma.prisma_client.outputclsimularcourse.create({
             "match_score": simular_course["match_score"],
-            "program_id": simular_course["program_id"],
+            "program": {
+                "connect": {
+                    "id": int(simular_course["program_id"])
+                }
+            },
             "response": {
                 "connect": {
                     "id": int(response_to_save.id)
