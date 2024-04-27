@@ -21,3 +21,32 @@ model ModelResponse {
     started_at      DateTime?
     finished_at     DateTime?
 }
+
+model Program {
+    id Int @id
+    name String
+    speciality String?
+    url String?
+    tag String?
+    days_amount Int?
+    price Int?
+    difficulty String?
+    modules Module[]
+    quarters Quarter[]
+}
+
+model Module {
+  id Int @id @default(autoincrement())
+  program_id Int 
+  program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  title String?
+  ordinal Int
+}
+
+model Quarter {
+  id Int @id @default(autoincrement())
+  program_id Int
+  program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  title String
+  ordinal Int
+}
