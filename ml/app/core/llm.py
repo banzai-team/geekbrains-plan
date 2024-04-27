@@ -13,7 +13,7 @@ data = yaml.safe_load(courses_grouped)
 model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
 n_gpu_layers = 1  # Metal set to 1 is enough.
-n_batch = 512
+n_batch = 2048
 lm = models.LlamaCpp(MODEL_PATH,
                      n_gpu_layers=n_gpu_layers,
                      n_ctx=4096,
@@ -72,9 +72,9 @@ def narrow(header: str, sample_text: str) -> dict[str, list[Any] | Any]:
 
     print(result_edu_course)
 
-    sm = SIMULAR_COURSES[result_edu_course]['simular']
+    sm = SIMULAR_COURSES.get(result_edu_course, {}).get('simular', [])
 
     return {
         'simular_courses': sm,
-        'edu_courses': [result_edu_course]
+        'edu_courses': [int(result_edu_course)]
     }

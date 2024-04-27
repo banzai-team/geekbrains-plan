@@ -77,19 +77,19 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     restart: always
-#
-#  ml-llm:
-#    build:
-#      context: ./ml/
-#    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
-#    environment:
-#      LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
-#    volumes:
-#      - app:/root/.cache
-#      - /Users/jamakase/.ollama/models/blobs:/app/models
-#      - ./ml/app:/app/app
-#    ports:
-#      - 8002:8000
+
+  ml-llm:
+    build:
+      context: ./ml/
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    environment:
+      LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
+    volumes:
+      - app:/root/.cache
+      - /Users/jamakase/.ollama/models/blobs:/app/models
+      - ./ml/app:/app/app
+    ports:
+      - 8002:8000
 
 volumes:
   app:
