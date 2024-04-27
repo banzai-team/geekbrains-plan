@@ -13,12 +13,17 @@ const AddFormPage: React.FC = () => {
     const navigate = useNavigate();
     const sendFile = useMutation(uploadFile, {
         onSuccess: (data) => {
-            navigate(`${Routes.Vacancy}/${data.data.requestId}`);
+            setTimeout(() => {
+                navigate(`${Routes.Vacancy}/${data.data.requestId}`);
+            }, 1500);
+
         }
     });
     const sendLink = useMutation(uploadLink, {
         onSuccess: (data) => {
-            navigate(`${Routes.Vacancy}/${data.data.requestId}`);
+            setTimeout(() => {
+                navigate(`${Routes.Vacancy}/${data.data.requestId}`);
+            }, 1500);
         }
     });
 
@@ -49,7 +54,7 @@ const AddFormPage: React.FC = () => {
                     <CardTitle>Форма добавления</CardTitle>
                     <CardDescription>Добавьте ссылку на вакансию или файл вакансии</CardDescription>
                 </CardHeader>
-                <AddVacancyForm onSubmit={onSubmitForm} />
+                <AddVacancyForm onSubmit={onSubmitForm}  />
             </Card>
         </>
     );
