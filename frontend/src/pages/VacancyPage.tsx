@@ -7,17 +7,17 @@ import Breadcrumbs from '~/components/Breadcrumbs';
 import { Routes } from '~/pages/Router';
 import { getRequest } from "~/domain/api";
 import { useQuery } from "react-query";
-import {Clock, Wallet, BookHeart} from "lucide-react";
+import { Clock, Wallet, BookHeart } from "lucide-react";
 import Progress from '~/components/Progress';
 
 const VacancyPage: React.FC = () => {
   const { id = '' } = useParams();
 
-  const request = useQuery(["request", id], () => getRequest(id));
+  const request = useQuery(["request", id], () => getRequest(id), { refetchInterval: 3000 });
 
   return (
     <>
-      <Head title={`Вакансия ${id}`} />
+      <Head title={`Вакансия ${id}`}/>
       <Breadcrumbs
         path={[
           {
@@ -52,7 +52,7 @@ const VacancyPage: React.FC = () => {
           <CardHeader className="pb-2">
             <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
               Стоимость
-              <Wallet className="h-6 w-6 text-muted-foreground" />
+              <Wallet className="h-6 w-6 text-muted-foreground"/>
             </CardDescription>
             <CardTitle className="text-4xl text-primary">2000 &#8381;</CardTitle>
           </CardHeader>
@@ -64,7 +64,7 @@ const VacancyPage: React.FC = () => {
           <CardHeader className="pb-2">
             <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
               Длительность
-              <Clock className="h-6 w-6 text-muted-foreground" />
+              <Clock className="h-6 w-6 text-muted-foreground"/>
             </CardDescription>
             <CardTitle className="text-4xl text-primary">4 месяца</CardTitle>
           </CardHeader>
@@ -76,10 +76,10 @@ const VacancyPage: React.FC = () => {
           <CardHeader className="pb-0">
             <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
               Совместимость
-              <BookHeart className="h-6 w-6 text-muted-foreground" />
+              <BookHeart className="h-6 w-6 text-muted-foreground"/>
             </CardDescription>
           </CardHeader>
-          <CardContent className="pb-4 pt-2"><Progress progress={0.90} /></CardContent>
+          <CardContent className="pb-4 pt-2"><Progress progress={0.90}/></CardContent>
         </Card>
         <Card className="sm:col-span-3" x-chunk="vacancy-chunk-1">
           <CardHeader className="pb-2">

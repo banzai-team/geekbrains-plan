@@ -16,7 +16,7 @@ services:
       - 4000:8000
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
-      - ./tmp:/var/planning/uploads
+      - ${ROOT_DIR}/app/tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -56,7 +56,7 @@ services:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
-            - ${ROOT_DIR}tmp:/var/planning/uploads
+      - ${ROOT_DIR}tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
@@ -98,4 +98,3 @@ services:
       - ${ROOT_DIR}app/models:/app/models
     ports:
       - 8002:7999
-

@@ -12,6 +12,16 @@ const ModelsQuery = gql`
             response {
                 eduCourses {
                     id
+                    program {
+                        daysAmount
+                        difficulty
+                        id
+                        name
+                        price
+                        speciality
+                        tag
+                        url
+                    }
                 }
                 simularCourses {
                     id
@@ -31,6 +41,7 @@ const ModelsQuery = gql`
                         }
                     }
                 }
+                meta
             }
             source
             sourceType
@@ -46,6 +57,16 @@ const ModelQuery = gql`
             response {
                 eduCourses {
                     id
+                    program {
+                        daysAmount
+                        difficulty
+                        id
+                        name
+                        price
+                        speciality
+                        tag
+                        url
+                    }
                 }
                 simularCourses {
                     id
@@ -56,10 +77,6 @@ const ModelQuery = gql`
                         id
                         name
                         price
-                        quarter {
-                            id
-                            title
-                        }
                         speciality
                         tag
                         url
@@ -69,6 +86,7 @@ const ModelQuery = gql`
                         }
                     }
                 }
+                meta
             }
             source
             sourceType

@@ -4,9 +4,9 @@ resource "yandex_storage_bucket" "this" {
   access_key = var.access_key
   secret_key = var.secret_key
 
-  #  https {
-  #    certificate_id = local.certificate_id
-  #  }
+   https {
+     certificate_id = var.https.existing_certificate_id
+   }
 
 #  dynamic "cors_rule" {
 #    for_each = var.cors_rule
