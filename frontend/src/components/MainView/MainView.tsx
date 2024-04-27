@@ -6,7 +6,10 @@ import Header from '~/components/Header';
 
 const MainView: React.FC = () => {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div
+        className="flex min-h-screen w-full flex-col bg-muted/40 bg-center bg-no-repeat bg-cover"
+        style={{backgroundImage: 'url("/public/bg.svg")'}}
+    >
       <Sidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
