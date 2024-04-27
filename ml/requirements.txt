@@ -11,7 +11,7 @@ torchaudio==2.1.1
 git+https://github.com/huggingface/transformers.git
 datasets[audio]
 numpy==1.26.0
-accelerate==0.24.1
+accelerate
 requests==2.31.0
 sentencepiece
 guidance
@@ -21,3 +21,4 @@ accelerate
 pandas
 numpy
 llama-cpp-python
+bitsandbytes

@@ -4,6 +4,7 @@ import re
 
 import transformers
 import torch
+from transformers import BitsAndBytesConfig
 
 from .dict import courses_grouped
 
@@ -12,14 +13,14 @@ from app.config import device, MODEL_PATH
 
 data = yaml.safe_load(courses_grouped)
 
-# model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
+model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
 lm = models.LlamaCpp(MODEL_PATH)
 
 model = models.Transformers(
-    MODEL_PATH,
+    model_name_or_path,
     device_map="auto",
-    load_in_8bit=True,
+    quantization_config=BitsAndBytesConfig(load_in_8bit=True),
     _attn_implementation='sdpa'
 )
 
