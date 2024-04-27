@@ -58,6 +58,7 @@ class ModelResponse:
 @strawberry.type
 class ModelRequest:
     id: int
+    task_id: Optional[str]
     source: Optional[str] = None
     source_type: Optional[str] = None
     performed_at: Optional[date] = None
@@ -72,8 +73,26 @@ class Query:
         return prisma.prisma_client.modelrequest.find_many(include={
             "response": {
                 "include": {
-                    "edu_courses": True,
-                    "simular_courses": True
+                    "edu_courses": {
+                        "include": {
+                            "program": {
+                                "include": {
+                                    "modules": True,
+                                    "quarters": True
+                                }
+                            }
+                        }
+                    },
+                    "simular_courses": {
+                        "include": {
+                            "program": {
+                                "include": {
+                                    "modules": True,
+                                    "quarters": True
+                                }
+                            }
+                        }
+                    }
                 }
             }
         })
