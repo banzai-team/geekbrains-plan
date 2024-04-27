@@ -21,33 +21,10 @@ function Index() {
 
   const requests = useQuery(["requests"], getRequests);
   const data = requests.data;
-  //
-  // const data = [
-  //   {
-  //     id: 'pro-1',
-  //     vacancy: 'Паграмист',
-  //     vacancyLink: 'https://google.com',
-  //     price: '5000',
-  //     status: 'Done',
-  //   },
-  //   {
-  //     id: 'fu-15',
-  //     vacancy: 'Клининг мастер',
-  //     vacancyLink: 'https://google.com',
-  //     price: '1000000',
-  //     status: 'Done',
-  //   },
-  //   {
-  //     id: 'like-2345',
-  //     vacancy: 'Дизайнер обоев',
-  //     vacancyLink: 'https://google.com',
-  //     price: '',
-  //     status: 'Progress',
-  //   },
-  // ];
+
   return (
     <>
-      <Head title="Главная"/>
+      <Head title="Главная" />
       <Breadcrumbs
         path={[
           {
@@ -59,8 +36,8 @@ function Index() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between px-7">
           <div className="space-y-1.5">
-            <CardTitle>Таблица с данными</CardTitle>
-            <CardDescription>Отображение вакансия - курсы</CardDescription>
+            <CardTitle>Ваши вакансии</CardTitle>
+            <CardDescription>Вакансии и подходящие к ним курсы</CardDescription>
           </div>
           <Button size="sm" onClick={onAddClick}>
             <Plus className="h-4 w-4 mr-2"/>
