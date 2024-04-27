@@ -67,9 +67,10 @@ def text_extraction(text: str) -> str:
 def model_invocation(vacancy_ser: str) -> int:
     response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
-    course = response.json().result
-    print(course)
-    return f"model call result for vacancy {course[0]}"
+    courses = response.json()["edu_courses"]
+    similar_courses = response.json()["simular_courses"]
+    print(courses)
+    return f"model call result for vacancy {courses[0]}"
 
 
 def custom_vacancy_decoder(vacancy_dict):
