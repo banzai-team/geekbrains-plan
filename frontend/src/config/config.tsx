@@ -5,5 +5,5 @@ declare global {
 }
 
 export const config = {
-  apiUrl: "http://api.geekbrains.banzai-predict.site:4000/api"
+  apiUrl: window.API_URL || import.meta.env.VITE_API_URL || "http://localhost:4000"
 }
