@@ -53,9 +53,10 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
-      - ${ROOT_DIR}/tmp:/var/planning/uploads
+            - ${ROOT_DIR}/tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
@@ -67,6 +68,7 @@ services:
       - 5555:5555
     command: celery -A app.worker.worker flower --loglevel=info
     environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
