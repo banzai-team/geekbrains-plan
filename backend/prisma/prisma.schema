@@ -12,22 +12,23 @@ generator client {
 
 model ModelRequest {
     id              Int     @id @default(autoincrement())
-    request            String
     performed_at       DateTime
+    source_type    String?
+    source         String?
     response ModelResponse?
 }
 
 model OutputClEduCourse {
     id Int @id @default(autoincrement())
     response_id Int
-    model_response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     edu_course Int
 }
 
 model OutputClSimularCourse {
     id Int @id @default(autoincrement())
     response_id Int
-    model_response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     match_score Float
     program_id Int
 }
