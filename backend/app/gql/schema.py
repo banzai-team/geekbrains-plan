@@ -8,13 +8,19 @@ from app.db import prisma
 
 
 @strawberry.type
+class ModelResponse:
+    id: int
+    response: Optional[str]
+    started_at: Optional[date]
+    finished_at: Optional[date]
+
+
+@strawberry.type
 class ModelRequest:
     id: int
     request: Optional[str] = None
-    requested_at: Optional[date] = None
-    started_at: Optional[date] = None
-    finished_at: Optional[date] = None
-
+    performed_at: Optional[date] = None
+    response: Optional[ModelResponse]
 
 @strawberry.type
 class Program:
@@ -31,12 +37,14 @@ class Program:
 @strawberry.type
 class Query:
     @strawberry.field()
-    async def model_requests(self) -> List[ModelRequest]:
-        return await prisma.prisma_client.modelrequest.find_many()
+    def model_requests(self) -> List[ModelRequest]:
+        return prisma.prisma_client.modelrequest.find_many()
 
     @strawberry.field()
-    async def model_request(self, id: int) -> ModelRequest:
-        return await prisma.prisma_client.modelrequest.find_unique(where={"id": id})
+    def model_request(self, id: int) -> ModelRequest:
+        return prisma.prisma_client.modelrequest.find_unique(where={"id": id}, include={
+            "response": True
+        })
     
 
 schema = strawberry.Schema(query=Query)
