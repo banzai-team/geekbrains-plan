@@ -47,20 +47,20 @@ export async function getRequest(id: string) {
   return response.modelRequest;
 }
 
-// export type UploadFilePayload = {
-//   file: any;
-// };
+export type UploadFilePayload = {
+  file: any;
+};
 
-// export async function uploadFile(payload: UploadFilePayload) {
-//   const form = new FormData();
-//   form.append("file", payload.file);
-//
-//   return await axios.post(`${config.apiUrl}/api/plan/pdf`, form, {
-//     headers: {
-//       'Content-Type': `multipart/form-data;`,
-//     },
-//   });
-// }
+export async function uploadFile(payload: UploadFilePayload) {
+  const form = new FormData();
+  form.append("file", payload.file);
+
+  return await axios.post(`${config.apiUrl}/api/plan/pdf`, form, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
 
 export async function uploadLink(payload: any) {
   return await axios.post(`${config.apiUrl}/api/plan`, {

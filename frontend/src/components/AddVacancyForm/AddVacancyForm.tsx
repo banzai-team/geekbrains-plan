@@ -61,7 +61,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
                           <FileCheck2 className="h-8 w-8 text-primary" />
                         </div>
                         <div>
-                          <div className="font-medium pt-2">{formik.values.files[0].name}</div>
+                          <div className="font-medium pt-2 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-24 md:max-w-32 lg:max-w-52 xl:max-w-80">{formik.values.files[0].name}</div>
                           <div
                               className="text-xs text-muted-foreground pt-1">{(formik.values.files[0].size / 1024 / 1024).toFixed(2)}Мб
                           </div>
