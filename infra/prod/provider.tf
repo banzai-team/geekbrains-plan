@@ -17,4 +17,5 @@ provider "yandex" {
   folder_id                = var.folder_id
   storage_access_key       = var.access_key
   storage_secret_key       = var.secret_key
+  zone = "ru-central1-a"
 }
