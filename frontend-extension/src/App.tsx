@@ -12,13 +12,13 @@ function App() {
   // @ts-ignore
   const vacancyHandler = async () => likeVacancy(url)
 
-  const like = useMutation(() => vacancyHandler());
+  const likeMutation = useMutation(() => vacancyHandler());
 
   return (
     <>
-      <Button disabled={like.isLoading} variant="outline" onClick={() => like}>
+      <Button disabled={likeMutation.isLoading} variant="outline" onClick={() => likeMutation.mutateAsync()}>
         Like1:
-        {like.isLoading ? "Loading..." : like.isSuccess || "not yet called"}
+        {likeMutation.isLoading ? "Loading..." : likeMutation.isSuccess || "not yet called"}
       </Button>
     </>
   )
