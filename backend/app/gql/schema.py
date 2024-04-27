@@ -54,6 +54,8 @@ class ModelResponse:
     finished_at: Optional[date]
     edu_courses: Optional[List[OutputClEduCourse]]
     simular_courses: Optional[List[OutputClSimularCourse]]
+    course_coverage: Optional[float]
+    meta: Optional[str]
 
 @strawberry.type
 class ModelRequest:

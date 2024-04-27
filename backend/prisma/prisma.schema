@@ -45,6 +45,8 @@ model ModelResponse {
     finished_at     DateTime?
     edu_courses OutputClEduCourse[]
     simular_courses OutputClSimularCourse[]
+    course_coverage Float?   @default(0.0)
+    meta String?
 }
 
 model Program {
