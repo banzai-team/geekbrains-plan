@@ -8,24 +8,30 @@ const ModelsQuery = gql`
     query modelRequests {
         modelRequests {
             id
-            eduCourses {
-                eduCourse
-            }
             performedAt
-            request
+            response {
+                eduCourses {
+                    id
+                }
+            }
+            source
+            sourceType
         }
     }
 `;
 
 const ModelQuery = gql`
-    query modelRequest($id: String!) {
+    query modelRequest($id: Int!) {
         modelRequest(id: $id) {
             id
-            eduCourses {
-                eduCourse
-            }
             performedAt
-            request
+            response {
+                eduCourses {
+                    id
+                }
+            }
+            source
+            sourceType
         }
     }
 `;
@@ -37,7 +43,7 @@ export async function getRequests() {
 }
 
 export async function getRequest(id: string) {
-  const response = await request<{ modelRequest: any }>(`${config.apiUrl}/graphql`, ModelQuery, {});
+  const response = await request<{ modelRequest: any }>(`${config.apiUrl}/graphql`, ModelQuery, {id});
   return response.modelRequest;
 }
 

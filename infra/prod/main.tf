@@ -12,6 +12,10 @@ module "website" {
     index = "index.html"
     error = "index.html"
   }
+
+  https = {
+    existing_certificate_id = "fpqn58g6b03v8bmn1ejl"
+  }
 }
 
 resource "yandex_vpc_security_group" "level-instance-sg" {
@@ -38,34 +42,6 @@ resource "yandex_vpc_security_group" "level-instance-sg" {
     to_port           = -1
     v4_cidr_blocks    = []
     v6_cidr_blocks    = []
-  }
-
-  ingress {
-    protocol       = "TCP"
-    description    = "https"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 443
-  }
-
-  ingress {
-    protocol       = "TCP"
-    description    = "https"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 3000
-  }
-
-  ingress {
-    protocol       = "TCP"
-    description    = "https"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 4000
-  }
-
-  ingress {
-    protocol       = "TCP"
-    description    = "https"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port           = 5000
   }
 
   ingress {
@@ -118,7 +94,7 @@ resource "yandex_compute_instance" "backend" {
     initialize_params {
       name     = "geekbrains"
       image_id = data.yandex_compute_image.container-optimized-image.id
-      size = 50
+      size     = 50
     }
   }
 
@@ -142,7 +118,7 @@ resource "yandex_compute_instance" "backend" {
       DB_USER : "postgres"
       DB_PASSWORD : "2Od5uhnPl5po"
       DB_NAME : "postgres"
-      ROOT_DIR: "/home/yc-user/"
+      ROOT_DIR : "/home/yc-user/"
     })
     user-data = file("${path.module}/cloud-config/cloud_config.yaml")
   }

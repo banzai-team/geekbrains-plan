@@ -20,34 +20,31 @@ function Index() {
   };
 
   const requests = useQuery(["requests"], getRequests);
-
-  {
-    /*TODO: add real data*/
-  }
-  const data = [
-    {
-      id: 'pro-1',
-      vacancy: 'Паграмист',
-      vacancyLink: 'https://google.com',
-      price: '5000',
-      status: 'Done',
-    },
-    {
-      id: 'fu-15',
-      vacancy: 'Клининг мастер',
-      vacancyLink: 'https://google.com',
-      price: '1000000',
-      status: 'Done',
-    },
-    {
-      id: 'like-2345',
-      vacancy: 'Дизайнер обоев',
-      vacancyLink: 'https://google.com',
-      price: '',
-      status: 'Progress',
-    },
-  ];
-
+  const data = requests.data;
+  //
+  // const data = [
+  //   {
+  //     id: 'pro-1',
+  //     vacancy: 'Паграмист',
+  //     vacancyLink: 'https://google.com',
+  //     price: '5000',
+  //     status: 'Done',
+  //   },
+  //   {
+  //     id: 'fu-15',
+  //     vacancy: 'Клининг мастер',
+  //     vacancyLink: 'https://google.com',
+  //     price: '1000000',
+  //     status: 'Done',
+  //   },
+  //   {
+  //     id: 'like-2345',
+  //     vacancy: 'Дизайнер обоев',
+  //     vacancyLink: 'https://google.com',
+  //     price: '',
+  //     status: 'Progress',
+  //   },
+  // ];
   return (
     <>
       <Head title="Главная"/>
