@@ -7,8 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 from celery import Celery
 from celery import chain
-from langchain_community.document_loaders import AsyncHtmlLoader
+from langchain_community.document_loaders import AsyncHtmlLoader, AsyncChromiumLoader
 from langchain_community.document_loaders import PyPDFLoader
+import trafilatura
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -77,9 +78,13 @@ def custom_vacancy_decoder(vacancy_dict):
 
 # Load HTML
 def parse_html(html: str) -> str:
-    loader = AsyncHtmlLoader([html])
+    downloaded = trafilatura.fetch_url(html)
+    text = trafilatura.extract(downloaded)
+
+    return text
+    # loader = AsyncHtmlLoader([html])
     # loader = AsyncChromiumLoader([html])
-    html = loader.load()
+    # html = loader.load()
 
     soup = BeautifulSoup(html[0].page_content, 'html.parser')
 
