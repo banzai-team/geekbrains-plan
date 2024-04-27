@@ -13,5 +13,5 @@ router = APIRouter(prefix="/v1")
              status_code=status.HTTP_200_OK,
              response_model=OutputCl)
 def sum_(input_: InputCl) -> OutputCl:
-    llm_result = narrow(header="", sample_text=input_.text)
-    return OutputCl(result=llm_result)
+    llm_result = narrow(sample_text=input_.text)
+    return OutputCl(**llm_result)
