@@ -1,5 +1,7 @@
+import { config } from "~/config/config.tsx";
+
 export async function likeVacancy(url: string) {
-  const result = fetch("https://api.restful-api.dev/objects", {
+  const result = fetch(`${config.apiUrl}/plan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
