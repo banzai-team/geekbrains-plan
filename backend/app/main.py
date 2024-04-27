@@ -5,7 +5,7 @@ import traceback
 from typing import Optional
 import uvicorn
 from pydantic import BaseModel, Field
-
+from fastapi.middleware.cors import CORSMiddleware
 from app.db import prisma
 from fastapi import FastAPI, Response, status, UploadFile
 from app.worker import worker
@@ -15,6 +15,14 @@ app = FastAPI()
 uploads_dir = "/var/planning/uploads"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class HealthCheck(BaseModel):
     status: str = "OK"
