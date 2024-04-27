@@ -12,10 +12,10 @@ resource "yandex_container_registry_iam_binding" "pusher" {
   ]
 }
 
-resource "yandex_container_repository" "admin-api" {
+resource "yandex_container_repository" "frontend" {
   name = "${yandex_container_registry.registry.id}/gk-frontend"
 }
 
-resource "yandex_container_repository" "api" {
+resource "yandex_container_repository" "backend" {
   name = "${yandex_container_registry.registry.id}/gk-backend"
 }

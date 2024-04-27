@@ -12,7 +12,7 @@ services:
   web:
     build: ./backend
     ports:
-      - 8004:8000
+      - 4000:8000
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
       - ./backend/app:/app/app
@@ -21,6 +21,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - ML_SERVICE_URL=http://ml-llm:7999
     depends_on:
       - redis
       - db
@@ -50,7 +51,9 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
+      - ./backend/app:/app/app
       - ./tmp:/var/planning/uploads
     depends_on:
       - redis
@@ -82,17 +85,18 @@ services:
   ml-llm:
     build:
       context: ./ml/
-    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
     environment:
       LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
     volumes:
-      - app:/root/.cache
+      - ./app:/root/.cache
       - /Users/jamakase/.ollama/models/blobs:/app/models
       - ./ml/app:/app/app
     ports:
-      - 8002:8000
+      - 8002:7999
 
 volumes:
   app:
+    external: true
   tmp:
     external: true

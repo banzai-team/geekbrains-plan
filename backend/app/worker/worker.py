@@ -2,6 +2,7 @@ import datetime
 import logging
 import os
 from collections import namedtuple
+from langchain_community.document_loaders import AsyncHtmlLoader
 
 import requests
 from bs4 import BeautifulSoup
@@ -67,7 +68,7 @@ def text_extraction(text: str) -> str:
 
 @celery.task(name="model_invocation")
 def model_invocation(vacancy_ser: str) -> int:
-    response = requests.post(ML_SERVICE_URL, json={'text': vacancy_ser})
+    response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
     course = response.json().result
     print(course)
@@ -80,7 +81,8 @@ def custom_vacancy_decoder(vacancy_dict):
 
 # Load HTML
 def parse_html(html: str) -> str:
-    loader = AsyncChromiumLoader([html])
+    loader = AsyncHtmlLoader([html])
+    # loader = AsyncChromiumLoader([html])
     html = loader.load()
 
     soup = BeautifulSoup(html[0].page_content, 'html.parser')
