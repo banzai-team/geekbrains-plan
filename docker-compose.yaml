@@ -16,67 +16,67 @@ services:
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
       - ./backend/app:/app/app
-#    environment:
-#      - CELERY_BROKER_URL=redis://redis:6379/0
-#      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-#      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
-#    depends_on:
-#      - redis
-#      - db
-#
-#  prisma-migrate:
-#    build: ./backend
-#    environment:
-#      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
-#    command: >
-#      sh -c "prisma migrate deploy --schema ./prisma/prisma.schema"
-#    depends_on:
-#      - db
-#
-#  redis:
-#    image: redis:7
-#    restart: always
-#    ports:
-#      - '6379:6379'
-#    #    volumes:
-#    #      - ./cache:/data
-#    environment:
-#      REDIS_PORT: 6379
-#
-#  worker:
-#    build: ./backend
-#    command: celery -A app.worker.worker worker --loglevel=info
-#    environment:
-#      - CELERY_BROKER_URL=redis://redis:6379/0
-#      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-#    depends_on:
-#      - redis
-#      - db
-#
-#  flower:
-#    build: ./backend
-#    ports:
-#      - 5555:5555
-#    command: celery -A app.worker.worker flower --loglevel=info
-#    volumes:
-#      - ./backend:/usr/src/app
-#    environment:
-#      - CELERY_BROKER_URL=redis://redis:6379/0
-#      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-#    depends_on:
-#      - redis
-#      - db
-#
-#  db:
-#    container_name: db-local
-#    image: postgres:15-alpine
-#    ports:
-#      - 5432:5432
-#    environment:
-#      POSTGRES_USER: ${DB_USER}
-#      POSTGRES_PASSWORD: ${DB_PASSWORD}
-#      POSTGRES_DB: ${DB_NAME}
-#    restart: always
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    depends_on:
+      - redis
+      - db
+
+  prisma-migrate:
+    build: ./backend
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    command: >
+      sh -c "prisma migrate deploy --schema ./prisma/prisma.schema"
+    depends_on:
+      - db
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - '6379:6379'
+    #    volumes:
+    #      - ./cache:/data
+    environment:
+      REDIS_PORT: 6379
+
+  worker:
+    build: ./backend
+    command: celery -A app.worker.worker worker --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - db
+
+  flower:
+    build: ./backend
+    ports:
+      - 5555:5555
+    command: celery -A app.worker.worker flower --loglevel=info
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - db
+
+  db:
+    container_name: db-local
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    restart: always
 #
 #  ml-llm:
 #    build:
