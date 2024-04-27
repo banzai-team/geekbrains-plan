@@ -1,17 +1,13 @@
-import datetime
+import json
 import logging
 import os
 from collections import namedtuple
-from langchain_community.document_loaders import AsyncHtmlLoader
 
 import requests
 from bs4 import BeautifulSoup
 from celery import Celery
 from celery import chain
-from langchain_community.document_loaders import AsyncChromiumLoader
-import json
-from celery import chain, group, chord
-from collections import namedtuple
+from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_loaders import PyPDFLoader
 
 logger = logging.getLogger(__name__)
@@ -97,7 +93,7 @@ def parse_html(html: str) -> str:
         if not tag.get_text(strip=True):
             tag.decompose()
 
-    sample_text = str(soup)
+    sample_text = str(soup.text)
     sample_text = '\n'.join(line.strip() for line in sample_text.split('\n') if len(line.strip()) > 0)
 
     return sample_text
