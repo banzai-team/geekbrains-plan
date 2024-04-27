@@ -16,6 +16,7 @@ services:
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
       - ./backend/app:/app/app
+      - ./tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -49,6 +50,8 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ./tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
@@ -58,8 +61,6 @@ services:
     ports:
       - 5555:5555
     command: celery -A app.worker.worker flower --loglevel=info
-    volumes:
-      - ./backend:/usr/src/app
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -93,3 +94,5 @@ services:
 
 volumes:
   app:
+  tmp:
+    external: true

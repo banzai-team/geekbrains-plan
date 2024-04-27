@@ -1,4 +1,5 @@
-import json
+import datetime
+import logging
 import os
 from collections import namedtuple
 
@@ -7,6 +8,13 @@ from bs4 import BeautifulSoup
 from celery import Celery
 from celery import chain
 from langchain_community.document_loaders import AsyncChromiumLoader
+import json
+from celery import chain, group, chord
+from collections import namedtuple
+from langchain_community.document_loaders import PyPDFLoader
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 from app.config.config import ML_SERVICE_URL
 
@@ -15,22 +23,32 @@ celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
 
-@celery.task(name="create_html_workflow")
+@celery.task(name="create_text_workflow")
+def plan_for_text(text: str):
+    return chain(text_extraction.s(text), model_invocation.s()).delay()
+
+
+@celery.task(name="create_url_workflow")
 def plan_for_url(url: str):
-    chain(url_extraction.s(url), model_invocation.s()).delay()
-    return True
+    return chain(url_extraction.s(url), model_invocation.s()).delay()
 
 
 @celery.task(name="create_pdf_workflow")
-def plan_for_text(text: str):
-    chain(text_extraction.s(text), model_invocation.s()).delay()
-    return True
+def plan_for_pdf(text: str):
+    return chain(pdf_extraction.s(text), model_invocation.s()).delay()
 
 
 @celery.task(name="pdf_extraction")
 def pdf_extraction(file_path: str) -> str:
+    pdf_loader = PyPDFLoader(file_path)
+    pages = pdf_loader.load()
+    text = ""
+    for page in pages:
+        text += page.page_content
+
+    logger.debug(f"extracted text from {file_path}: {text}")
     return json.dumps({
-        "title": f"some_vacancy_from_pdf: {file_path}"
+        "title": f"some_vacancy_from_pdf: {text}"
     })
 
 
