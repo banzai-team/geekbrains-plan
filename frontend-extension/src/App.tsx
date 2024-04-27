@@ -3,8 +3,9 @@ import { Button } from "~/components/ui/button";
 import { likeVacancy } from "~/domain/api.tsx";
 import { useMutation } from "react-query";
 
-let url = ""
-chrome.tabs.query({ active: true, lastFocusedWindow: true }, async (tabs: any) => {
+let url = "";
+
+chrome?.tabs?.query({ active: true, lastFocusedWindow: true }, async (tabs: any) => {
   url = tabs[0].url;
 });
 
