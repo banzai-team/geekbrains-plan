@@ -52,7 +52,8 @@ def healthcheck():
 @app.post("/api/plan", status_code=201)
 def plan_for_text(plan_request: PlanRequest, response: Response):
     request_to_save = {
-        "performed_at": datetime.datetime.now()
+        "performed_at": datetime.datetime.now(),
+        "status": "CREATED"
     }
     request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
     if plan_request.url:

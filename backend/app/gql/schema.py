@@ -29,8 +29,8 @@ class Program:
     difficulty: Optional[str]
     price: Optional[int]
     days_amount: Optional[int]
-    modules: Optional[Module]
-    quarter: Optional[Quarter]
+    modules: Optional[List[Module]]
+    quarter: Optional[List[Quarter]]
 
 
 @strawberry.type

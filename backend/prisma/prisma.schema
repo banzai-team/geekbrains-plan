@@ -18,6 +18,7 @@ model ModelRequest {
     source         String?
     req_text           String?
     response ModelResponse?
+    status String?
 }
 
 model OutputClEduCourse {
