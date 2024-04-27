@@ -1,24 +1,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { CardContent, CardFooter } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import Dropzone from "~/components/Dropzone";
-import {X} from "lucide-react";
-
-const validationSchema = Yup.object({
-  link: Yup.string().test(function (value) {
-    const { files } = this.parent;
-    if (!files) return value !== null;
-    return true;
-  }),
-  files: Yup.string().test(function (value) {
-    const { link } = this.parent;
-    if (!link) return value !== null;
-    return true;
-  }),
-});
+import {FileCheck2, X} from "lucide-react";
 
 type AddVacancyFormProps = {
   onSubmit: (values: { link?: string; files?: any }) => void;
@@ -33,6 +19,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
       name: string;
       mimeType: string;
       data: string;
+      size: number;
     }[] | null
   }>({
     initialValues: {
@@ -51,15 +38,24 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
           {
             formik.values.files
                 ? (
-                    <div>
-                      FILE: {formik.values.files[0].name}
-                      <Button variant="ghost" size="sm" onClick={() => formik.setFieldValue("files", null)}>
-                        <X className="text-destructive h-4 w-4 cursor-pointer hover:opacity-50" />
-                      </Button>
+                    <div className="flex flex-row gap-4">
+                      <div
+                          style={{ backgroundImage: 'url("/public/round.svg")'}}
+                          className="bg-center bg-no-repeat bg-cover relative p-4 flex h-36 w-40 flex-col items-center justify-center rounded-md bg-zinc-100 md:p-10 md:h-48"
+                      >
+                        <Button className="absolute top-1 right-0" variant="ghost" size="sm" onClick={() => formik.setFieldValue("files", null)}>
+                          <X className="text-destructive h-6 w-6 cursor-pointer hover:opacity-50" />
+                        </Button>
+                        <FileCheck2 className="h-8 w-8 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-medium pt-2">{formik.values.files[0].name}</div>
+                        <div className="text-xs text-muted-foreground pt-1">{(formik.values.files[0].size / 1024 / 1024).toFixed(2)}Мб</div>
+                      </div>
                     </div>
                 )
                 : (
-                <Dropzone onDrop={(acceptedFiles: any[]) => {
+                    <Dropzone onDrop={(acceptedFiles: any[]) => {
                   acceptedFiles.forEach((file) => {
                     const reader = new FileReader()
 
