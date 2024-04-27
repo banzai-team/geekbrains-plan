@@ -26,7 +26,7 @@ jobs:
       - run: |
           echo "Packaging docker image ..."
           tag="$DOCKER_REGISTRY/geekbrains-backend:${{ github.sha }}"
-          docker build -t $tag -t latest .
+          docker build -t $tag -t $DOCKER_REGISTRY/geekbrains-backend:latest .
           docker push $DOCKER_REGISTRY/geekbrains-backend --all-tags
         env:
           DOCKER_REGISTRY: cr.yandex/crpq1hjt5vn1sf4s6j1b
