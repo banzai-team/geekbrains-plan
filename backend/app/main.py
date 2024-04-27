@@ -1,13 +1,20 @@
+import logging
+import os
+import sys
+import traceback
 from typing import Optional
 import uvicorn
 from pydantic import BaseModel, Field
 
 from app.db import prisma
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, UploadFile
 from app.worker import worker
+import uuid
 
 app = FastAPI()
-
+uploads_dir = "/var/planning/uploads"
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class HealthCheck(BaseModel):
     status: str = "OK"
@@ -28,21 +35,40 @@ def healthcheck():
 
 
 @app.post("/api/plan", status_code=201)
-def pdf_selection(plan_request: PlanRequest, response: Response):
+def plan_for_text(plan_request: PlanRequest, response: Response):
     if plan_request.url:
-        worker.plan_for_url.delay(plan_request.url)
-        return {"status": "OK"}
+        async_task = worker.plan_for_url.delay(plan_request.url)
+        return {"status": "OK", "taskId": async_task.task_id}
     elif plan_request.text:
-        worker.plan_for_text.delay(plan_request.text)
-        return {"status": "OK"}
+        async_task = worker.plan_for_text.delay(plan_request.text)
+        return {"status": "OK", "taskId": async_task.task_id}
 
     response.status_code = status.HTTP_400_BAD_REQUEST
     return {"status": "ERROR", "message": "url or text must be set"}
 
 
 @app.post("/api/plan/pdf")
-def pdf_selection():
-    return True
+def plan_for_pdf(file: UploadFile, response: Response):
+    print("asdasd")
+    try:
+        if file.content_type != "application/pdf":
+            response.status_code = status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+            return {"status": "ERROR", "message": "pdf only is supported"}
+        upload_uuid = uuid.uuid4()
+        contents = file.file.read()
+        if not os.path.exists(uploads_dir):
+            os.makedirs(uploads_dir)
+        filepath = uploads_dir + "/" + "upload_" + str(upload_uuid) + ".pdf"
+        with open(filepath, 'wb') as f:
+            f.write(contents)
+        async_task = worker.plan_for_pdf.delay(filepath)
+        return {"status": "OK", "taskId": async_task.task_id}
+    except Exception as err:
+        traceback.print_exception(*sys.exc_info()) 
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return {"status": "ERROR", "message": "There was an error uploading the file"}
+    finally:
+        file.file.close()
 
 
 @app.on_event("startup")
