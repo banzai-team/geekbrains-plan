@@ -35,7 +35,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
       <CardContent className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
         <div>
           <div className="text-xs text-muted-foreground pb-1">Ссылка на вакансию</div>
-          <Input placeholder="https://..." {...formik.getFieldProps('link')} disabled={!!formik.values.files}/>
+          <Input placeholder="https://..." {...formik.getFieldProps('link')} disabled={!!formik.values.files} />
         </div>
 
         <div className="flex flex-col md:flex-row">
@@ -56,9 +56,9 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
                         >
                           <Button className="absolute top-1 right-0" variant="ghost" size="sm"
                                   onClick={() => formik.setFieldValue("files", null)}>
-                            <X className="text-destructive h-6 w-6 cursor-pointer hover:opacity-50"/>
+                            <X className="text-destructive h-6 w-6 cursor-pointer hover:opacity-50" />
                           </Button>
-                          <FileCheck2 className="h-8 w-8 text-primary"/>
+                          <FileCheck2 className="h-8 w-8 text-primary" />
                         </div>
                         <div>
                           <div className="font-medium pt-2">{formik.values.files[0].name}</div>
@@ -82,7 +82,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
                           }
                           reader.readAsArrayBuffer(file)
                         })
-                      }} disabled={!!formik.values.link} acceptTypes={{'application/pdf': ['.pdf']}}/>
+                      }} disabled={!!formik.values.link} acceptTypes={{'application/pdf': ['.pdf']}} />
                   )
             }
           </div>

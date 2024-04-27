@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import Head from '~/components/Head';
 import Breadcrumbs from '~/components/Breadcrumbs';
 import { Routes } from '~/pages/Router';
-import {Clock, Wallet} from "lucide-react";
+import {Clock, Wallet, BookHeart} from "lucide-react";
+import Progress from '~/components/Progress';
 
 const VacancyPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -25,15 +26,15 @@ const VacancyPage: React.FC = () => {
           },
         ]}
       />
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-        <Card className="row-start-1 row-end-3 sm:col-span-2" x-chunk="vacancy-chunk-0">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5">
+        <Card className="row-start-1 row-end-4 sm:col-span-3 md:col-span-3 lg:col-span-2 xl:col-span-2" x-chunk="vacancy-chunk-0">
           <CardHeader className="pb-2">
             <CardTitle>Вакансия классная</CardTitle>
             <CardDescription>VK</CardDescription>
           </CardHeader>
           <CardContent>data</CardContent>
         </Card>
-        <Card className="sm:col-span-2" x-chunk="vacancy-chunk-1">
+        <Card className="sm:col-span-3" x-chunk="vacancy-chunk-1">
           <CardHeader className="pb-2">
             <CardTitle>Курс самый прекрасный</CardTitle>
             <CardDescription>обязательно пройдите!</CardDescription>
@@ -63,6 +64,22 @@ const VacancyPage: React.FC = () => {
           <CardContent>
             <div className="text-xs text-muted-foreground">* ? доп текст ? *</div>
           </CardContent>
+        </Card>
+        <Card x-chunk="vacancy-chunk-4">
+          <CardHeader className="pb-0">
+            <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
+              Совместимость
+              <BookHeart className="h-6 w-6 text-muted-foreground" />
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pb-4 pt-2"><Progress progress={0.90} /></CardContent>
+        </Card>
+        <Card className="sm:col-span-3" x-chunk="vacancy-chunk-1">
+          <CardHeader className="pb-2">
+            <CardTitle>Обратите внимание</CardTitle>
+            <CardDescription>Курсы, которые так же могут пригодиться</CardDescription>
+          </CardHeader>
+          <CardContent>data</CardContent>
         </Card>
       </div>
     </>
