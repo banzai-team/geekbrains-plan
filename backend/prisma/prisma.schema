@@ -14,11 +14,13 @@ model ModelRequest {
     id              Int     @id @default(autoincrement())
     request            String
     performed_at       DateTime
+    response ModelResponse?
 }
 
 model ModelResponse {
     id Int @id @default(autoincrement())
-    request_id Int
+    request_id Int @unique
+    request ModelRequest @relation(fields: [request_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     response String?
     started_at      DateTime?
     finished_at     DateTime?
