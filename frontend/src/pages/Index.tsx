@@ -11,6 +11,7 @@ import { Plus } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useQuery } from "react-query";
 import { getRequests } from "~/domain/api";
+import {Spinner} from "~/components/ui/spinner";
 
 function Index() {
   const navigate = useNavigate();
@@ -45,7 +46,14 @@ function Index() {
           </Button>
         </CardHeader>
         <CardContent className="p-0">
-          {data && data.length ? <Table data={data}/> : <Empty text="Ой! Кажется еще ничего нет"/>}
+            {requests.isLoading
+                ? <div className="p-28">
+                    <Spinner size="large" />
+                </div>
+                : data && data.length
+                    ? <Table data={data} />
+                    : <Empty text="Ой! Кажется еще ничего нет" />
+            }
         </CardContent>
       </Card>
     </>
