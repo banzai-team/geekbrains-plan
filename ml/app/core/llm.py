@@ -13,10 +13,10 @@ data = yaml.safe_load(courses_grouped)
 model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
 n_gpu_layers = 1  # Metal set to 1 is enough.
-n_batch = 2048
+n_batch = 512
 lm = models.LlamaCpp(MODEL_PATH,
                      n_gpu_layers=n_gpu_layers,
-                     n_ctx=4096,
+                     n_ctx=8192,
                      n_batch=n_batch
                      )
 

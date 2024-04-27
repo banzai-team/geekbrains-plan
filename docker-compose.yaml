@@ -6,10 +6,9 @@ services:
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend
     ports:
       - 5173:5173
-    volumes:
-      - ./backend:/usr/src/app
     environment:
       - API_URL=web:8004
+
   web:
     build: ./backend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
@@ -17,7 +16,6 @@ services:
       - 4000:8000
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
-      - ./backend/app:/app/app
       - ./tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -30,6 +28,7 @@ services:
 
   prisma-migrate:
     build: ./backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
     command: >
@@ -46,7 +45,7 @@ services:
     #      - ./cache:/data
     environment:
       REDIS_PORT: 6379
-#
+
   worker:
     build: ./backend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
@@ -56,8 +55,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
-      - ./backend/app:/app/app
-      - ./tmp:/var/planning/uploads
+      - ${ROOT_DIR}/tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
@@ -85,7 +83,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     restart: always
-#
 
   ml-llm:
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml
@@ -93,11 +90,10 @@ services:
       context: ./ml/
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
     environment:
-      LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.ggu"
+      LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
     volumes:
-      - ./app:/root/.cache
-      - ./app/models:/app/models
-      - ./ml/app:/app/app
+      - ${ROOT_DIR}app:/root/.cache
+      - ${ROOT_DIR}app/models:/app/models
     ports:
       - 8002:7999
 
