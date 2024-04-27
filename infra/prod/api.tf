@@ -12,6 +12,12 @@ resource "yandex_api_gateway" "gateway" {
   #  connectivity {
   #    network_id = "<dynamic network id>"
   #  }
+
+  custom_domains {
+    certificate_id = "fpqn58g6b03v8bmn1ejl"
+    domain_id      = "d5d6hauh9lkqpdkad432"
+    fqdn           = "api.geekbrains.banzai-predict.site"
+  }
   spec = <<-EOT
 openapi: 3.0.0
 info:
