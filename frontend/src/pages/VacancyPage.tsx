@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import Head from '~/components/Head';
 import Breadcrumbs from '~/components/Breadcrumbs';
 import { Routes } from '~/pages/Router';
+import {Clock, Wallet} from "lucide-react";
 
 const VacancyPage: React.FC = () => {
   const { id = '' } = useParams();
@@ -41,7 +42,10 @@ const VacancyPage: React.FC = () => {
         </Card>
         <Card x-chunk="vacancy-chunk-2">
           <CardHeader className="pb-2">
-            <CardDescription>Стоимость</CardDescription>
+            <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
+              Стоимость
+              <Wallet className="h-6 w-6 text-muted-foreground" />
+            </CardDescription>
             <CardTitle className="text-4xl text-primary">2000 &#8381;</CardTitle>
           </CardHeader>
           <CardContent>
@@ -50,7 +54,10 @@ const VacancyPage: React.FC = () => {
         </Card>
         <Card x-chunk="vacancy-chunk-3">
           <CardHeader className="pb-2">
-            <CardDescription>Длительность</CardDescription>
+            <CardDescription className="flex flex-row items-center justify-between space-y-0 pb-0">
+              Длительность
+              <Clock className="h-6 w-6 text-muted-foreground" />
+            </CardDescription>
             <CardTitle className="text-4xl text-primary">4 месяца</CardTitle>
           </CardHeader>
           <CardContent>

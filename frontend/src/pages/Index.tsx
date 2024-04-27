@@ -6,8 +6,17 @@ import Table from '~/components/Table';
 import Empty from '~/components/Empty';
 import Breadcrumbs from '~/components/Breadcrumbs';
 import {Routes} from "~/pages/Router";
+import {Button} from "~/components/ui/button";
+import {Plus} from "lucide-react";
+import {useNavigate} from "react-router";
 
 function Index() {
+  const navigate = useNavigate();
+
+  const onAddClick = () => {
+    navigate(`${Routes.Vacancy}${Routes.New}`);
+  };
+
   {
     /*TODO: add real data*/
   }
@@ -47,9 +56,15 @@ function Index() {
           ]}
       />
       <Card>
-        <CardHeader className="px-7">
-          <CardTitle>Таблица с данными</CardTitle>
-          <CardDescription>Отображение вакансия - курсы</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between px-7">
+          <div className="space-y-1.5">
+            <CardTitle>Таблица с данными</CardTitle>
+            <CardDescription>Отображение вакансия - курсы</CardDescription>
+          </div>
+          <Button size="sm" onClick={onAddClick}>
+            <Plus className="h-4 w-4 mr-2"/>
+            Добавить
+          </Button>
         </CardHeader>
         <CardContent className="p-0">
           {data && data.length ? <Table data={data} /> : <Empty text="Ой! Кажется еще ничего нет" />}

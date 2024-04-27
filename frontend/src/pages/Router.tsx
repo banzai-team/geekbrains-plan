@@ -12,10 +12,12 @@ const Loading = () => (
 const IndexScreen = lazy(() => import('~/pages/Index'));
 const VacancyScreen = lazy(() => import('~/pages/VacancyPage'));
 const Page404Screen = lazy(() => import('~/pages/404'));
+const AddFormScreen = lazy(() => import('~/pages/AddFormPage'));
 
 export const Routes = {
   Root: '/',
   Vacancy: '/vacancy',
+  New: '/new',
 };
 
 export const Router = () => {
@@ -37,6 +39,14 @@ const InnerRouter = () => {
           element: (
             <Suspense fallback={<Loading />}>
               <IndexScreen />
+            </Suspense>
+          ),
+        },
+        {
+          path: `${Routes.Vacancy}${Routes.New}`,
+          element: (
+            <Suspense fallback={<Loading />}>
+              <AddFormScreen/>
             </Suspense>
           ),
         },
