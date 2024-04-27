@@ -1,3 +1,4 @@
+import datetime
 import logging
 import os
 import sys
@@ -50,12 +51,18 @@ def healthcheck():
 
 @app.post("/api/plan", status_code=201)
 def plan_for_text(plan_request: PlanRequest, response: Response):
+    request_to_save = {
+        "performed_at": datetime.datetime.now()
+    }
+    request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
     if plan_request.url:
-        async_task = worker.plan_for_url.delay(plan_request.url)
-        return {"status": "OK", "taskId": async_task.task_id}
+        async_task = worker.plan_for_url.delay(request_to_save.id, plan_request.url)
+        prisma.prisma_client.modelrequest.update(where={"id": request_to_save.id}, data={"task_id": async_task.task_id})
+        return {"status": "OK", "taskId": async_task.task_id, "requestId": request_to_save.id}
     elif plan_request.text:
-        async_task = worker.plan_for_text.delay(plan_request.text)
-        return {"status": "OK", "taskId": async_task.task_id}
+        async_task = worker.plan_for_text.delay(request_to_save.id, plan_request.text)
+        prisma.prisma_client.modelrequest.update(where={"id": request_to_save.id}, data={"task_id": async_task.task_id})
+        return {"status": "OK", "taskId": async_task.task_id, "requestId": request_to_save.id}
 
     response.status_code = status.HTTP_400_BAD_REQUEST
     return {"status": "ERROR", "message": "url or text must be set"}
@@ -63,11 +70,14 @@ def plan_for_text(plan_request: PlanRequest, response: Response):
 
 @app.post("/api/plan/pdf")
 def plan_for_pdf(file: UploadFile, response: Response):
-    print("asdasd")
     try:
         if file.content_type != "application/pdf":
             response.status_code = status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
             return {"status": "ERROR", "message": "pdf only is supported"}
+        request_to_save = {
+            "performed_at": datetime.datetime.now()
+        }
+        request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
         upload_uuid = uuid.uuid4()
         contents = file.file.read()
         if not os.path.exists(uploads_dir):
@@ -75,8 +85,9 @@ def plan_for_pdf(file: UploadFile, response: Response):
         filepath = uploads_dir + "/" + "upload_" + str(upload_uuid) + ".pdf"
         with open(filepath, 'wb') as f:
             f.write(contents)
-        async_task = worker.plan_for_pdf.delay(filepath)
-        return {"status": "OK", "taskId": async_task.task_id}
+        async_task = worker.plan_for_pdf.delay(request_to_save.id, filepath)
+        prisma.prisma_client.modelrequest.update(where={"id": request_to_save.id}, data={"task_id": async_task.task_id})
+        return {"status": "OK", "taskId": async_task.task_id, "requestId": request_to_save.id}
     except Exception as err:
         traceback.print_exception(*sys.exc_info()) 
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR

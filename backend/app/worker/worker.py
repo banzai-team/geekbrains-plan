@@ -25,22 +25,26 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 
 
 @celery.task(name="create_text_workflow")
-def plan_for_text(text: str):
-    return chain(text_extraction.s(text), model_invocation.s()).delay()
+def plan_for_text(request_id, text: str):
+    return chain(text_extraction.s(request_id, text), model_invocation.s()).delay()
 
 
 @celery.task(name="create_url_workflow")
-def plan_for_url(url: str):
-    return chain(url_extraction.s(url), model_invocation.s()).delay()
+def plan_for_url(request_id,url: str):
+    return chain(url_extraction.s(request_id, url), model_invocation.s()).delay()
 
 
 @celery.task(name="create_pdf_workflow")
-def plan_for_pdf(text: str):
-    return chain(pdf_extraction.s(text), model_invocation.s()).delay()
+def plan_for_pdf(request_id, text: str):
+    return chain(pdf_extraction.s(request_id, text), model_invocation.s()).delay()
 
 
 @celery.task(name="pdf_extraction")
-def pdf_extraction(file_path: str) -> str:
+def pdf_extraction(request_id, file_path: str) -> str:
+    prisma.prisma_client.modelrequest.update(where={"id": request_id}, data={
+        "source": file_path,
+        "source_type": "pdf",
+    })
     pdf_loader = PyPDFLoader(file_path)
     pages = pdf_loader.load()
     text = ""
@@ -49,44 +53,49 @@ def pdf_extraction(file_path: str) -> str:
 
     logger.debug(f"extracted text from {file_path}: {text}")
     return json.dumps({
-        "title": f"some_vacancy_from_pdf: {text}"
+        "request_id": request_id,
+        "text": text
     })
 
 
-@celery.task(name="save_request")
-def save_request(): {
-
-}
-
-
 @celery.task(name="url_extraction")
-def url_extraction(url: str):
+def url_extraction(request_id, url: str):
+    prisma.prisma_client.modelrequest.update(where={"id": request_id}, data={
+        "source": url,
+        "source_type": "url",
+    })
+
     extracted_text = parse_html(url)
-    return extracted_text
+    
+    return json.dumps({
+        "request_id": request_id,
+        "text": extracted_text
+    })
 
 
 @celery.task(name="text_extraction")
-def text_extraction(text: str) -> str:
+def text_extraction(request_id, text: str) -> str:
+    prisma.prisma_client.modelrequest.update(where={"id": request_id}, data={
+        "source": text,
+        "source_type": "text",
+    })
+
     return json.dumps({
-        "title": f"some_vacancy_from_text: {text}"
+        "request_id": request_id,
+        "text": text
     })
 
 
 @celery.task(name="model_invocation")
-def model_invocation(vacancy_ser: str) -> int:
-    request_to_save = {
-        "source": vacancy_ser,
-        "performed_at": datetime.datetime.now()
-    }
-
-    request_to_save = prisma.prisma_client.modelrequest.create(request_to_save)
-    print(request_to_save)
+def model_invocation(ser: str) -> str:
+    des = json.loads(ser)
+    prisma.prisma_client.modelrequest.update(where={"id": des["request_id"]}, data={"req_text": des["text"]})
     response_to_save = {
-        "request_id": request_to_save.id,
+        "request_id": des["request_id"],
         "started_at": datetime.datetime.now()
     }
     response_to_save = prisma.prisma_client.modelresponse.create(response_to_save)
-    response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
+    response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': des["text"]})
 
     course = response.json()
     edu_courses = course["edu_courses"]

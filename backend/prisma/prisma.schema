@@ -13,8 +13,10 @@ generator client {
 model ModelRequest {
     id              Int     @id @default(autoincrement())
     performed_at       DateTime
+    task_id  String?
     source_type    String?
     source         String?
+    req_text           String?
     response ModelResponse?
 }
 
