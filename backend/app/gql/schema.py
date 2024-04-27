@@ -7,12 +7,6 @@ import strawberry
 from app.db import prisma
 
 
-@strawberry.type
-class ModelResponse:
-    id: int
-    response: Optional[str]
-    started_at: Optional[date]
-    finished_at: Optional[date]
 
 
 @strawberry.type
@@ -29,13 +23,21 @@ class OutputClSimularCourse:
 
 
 @strawberry.type
+class ModelResponse:
+    id: int
+    response: Optional[str]
+    started_at: Optional[date]
+    finished_at: Optional[date]
+    edu_courses: Optional[List[OutputClEduCourse]]
+    simular_courses: Optional[List[OutputClSimularCourse]]
+
+@strawberry.type
 class ModelRequest:
     id: int
-    request: Optional[str] = None
+    source: Optional[str] = None
+    source_type: Optional[str] = None
     performed_at: Optional[date] = None
     response: Optional[ModelResponse]
-    edu_courses: List[OutputClEduCourse]
-    simular_courses: List[OutputClSimularCourse]
 
 
 @strawberry.type
@@ -71,25 +73,31 @@ class Query:
     def model_requests(self) -> List[ModelRequest]:
         return prisma.prisma_client.modelrequest.find_many(include={
             "response": {
-                "edu_courses": True,
-                "simular_courses": True
+                "include": {
+                    "edu_courses": True,
+                    "simular_courses": True
+                }
             }
         })
 
     @strawberry.field()
-    def model_request(self, id: int) -> ModelRequest:
+    def model_request(self, id: int) -> Optional[ModelRequest]:
         return prisma.prisma_client.modelrequest.find_unique(where={"id": id}, include={
             "response": {
-                "edu_courses": True,
-                "simular_courses": True
+                "include": {
+                    "edu_courses": True,
+                    "simular_courses": True
+                }
             }
         })
     
     @strawberry.field()
     def programs(self) -> List[Program]:
         return prisma.prisma_client.program.find_many(include={
-            "modules": True,
-            "quarters": True,
+            "include": {
+                "edu_courses": True,
+                "simular_courses": True
+            }
         })
     
     @strawberry.field()

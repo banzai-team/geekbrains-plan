@@ -75,7 +75,7 @@ def text_extraction(text: str) -> str:
 @celery.task(name="model_invocation")
 def model_invocation(vacancy_ser: str) -> int:
     request_to_save = {
-        "request": vacancy_ser,
+        "source": vacancy_ser,
         "performed_at": datetime.datetime.now()
     }
 
@@ -103,7 +103,7 @@ def model_invocation(vacancy_ser: str) -> int:
     for course in edu_courses:
         course = prisma.prisma_client.outputcleducourse.create({
             "edu_course": course,
-            "model_response": {
+            "response": {
                 "connect": {
                     "id": int(response_to_save.id)
                 }
@@ -114,7 +114,7 @@ def model_invocation(vacancy_ser: str) -> int:
         course = prisma.prisma_client.outputclsimularcourse.create({
             "match_score": simular_course["match_score"],
             "program_id": simular_course["program_id"],
-            "model_response": {
+            "response": {
                 "connect": {
                     "id": int(response_to_save.id)
                 }
