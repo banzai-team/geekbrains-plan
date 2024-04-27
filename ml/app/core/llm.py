@@ -1,10 +1,12 @@
+from typing import Dict, List, Any
+
 import torch
 import transformers
 import yaml
 from guidance import models, select
 
 from app.config import device, MODEL_PATH
-from .dict import courses_grouped
+from .dicts import courses_grouped, SIMULAR_COURSES
 
 data = yaml.safe_load(courses_grouped)
 
@@ -26,7 +28,7 @@ pipeline = transformers.pipeline(
 )
 
 
-def narrow(header: str, sample_text: str) -> list[int]:
+def narrow(header: str, sample_text: str) -> dict[str, list[Any] | Any]:
     messages = [
         {"role": "system",
          "content": "Ты очень полезный ассистен, который помогает подбирать кадры для IT компании и не только"},
@@ -47,11 +49,8 @@ def narrow(header: str, sample_text: str) -> list[int]:
     level_d = data['children']
     level_idx = 0
     output = lm + prompt
-    result_edu_course = None
 
     while True:
-
-        message = ""
         message = f"Напиши номер категории, к которой вакансия относится больше всего:\n"
         for i in range(1, len(level_d) + 1):
             message += f'{i}. ' + level_d[i - 1]['name']
@@ -64,13 +63,18 @@ def narrow(header: str, sample_text: str) -> list[int]:
 
         choosen_index = int(output[f'level_{level_idx}']) - 1
 
-        #     if
         if not level_d[choosen_index].get('children'):
-            result_edu_course = level_d[choosen_index]['name']
+            result_edu_course = level_d[choosen_index]['id']
             break
 
         level_d = level_d[choosen_index].get('children')
         level_idx += 1
 
     print(result_edu_course)
-    return [0]
+
+    sm = SIMULAR_COURSES[result_edu_course]['simular']
+
+    return {
+        'simular_courses': sm,
+        'edu_courses': [result_edu_course]
+    }
