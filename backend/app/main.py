@@ -10,8 +10,14 @@ from app.db import prisma
 from fastapi import FastAPI, Response, status, UploadFile
 from app.worker import worker
 import uuid
+from strawberry.fastapi import GraphQLRouter
+from app.gql import schema
+
+graphql_app = GraphQLRouter(schema.schema)
+
 
 app = FastAPI()
+app.include_router(graphql_app, prefix="/graphql")
 uploads_dir = "/var/planning/uploads"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 import os
@@ -7,6 +8,7 @@ import requests
 from celery import Celery
 from celery import chain
 from langchain_community.document_loaders import PyPDFLoader
+from app.db import prisma
 import trafilatura
 
 logger = logging.getLogger(__name__)
@@ -47,6 +49,10 @@ def pdf_extraction(file_path: str) -> str:
         "title": f"some_vacancy_from_pdf: {text}"
     })
 
+@celery.task(name="save_request")
+def save_request(): {
+
+}
 
 @celery.task(name="url_extraction")
 def url_extraction(url: str):
@@ -63,12 +69,30 @@ def text_extraction(text: str) -> str:
 
 @celery.task(name="model_invocation")
 def model_invocation(vacancy_ser: str) -> int:
+    request_to_save = {
+        "request": vacancy_ser,
+        "performed_at": datetime.datetime.now()
+    }
+
+    prisma.prisma_client.modelrequest.create(request_to_save)
+    response_to_save = {
+        "request_id": request_to_save["id"],
+        "started_at": datetime.datetime.now()
+    }
+    response_to_save = prisma.prisma_client.modelresponse.create(response_to_save)
     response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
-    courses = response.json()["edu_courses"]
-    similar_courses = response.json()["simular_courses"]
-    print(courses)
-    return f"model call result for vacancy {courses[0]}"
+    course = response.json().result
+    prisma.prisma_client.modelresponse.update(where={
+        "id": response_to_save["id"]
+    },
+    data = {
+        "response": course,
+        "finished_at": datetime.datetime.now()
+    })
+
+    print(course)
+    return f"model call result for vacancy {course[0]}"
 
 
 def custom_vacancy_decoder(vacancy_dict):

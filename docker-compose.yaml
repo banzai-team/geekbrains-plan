@@ -1,13 +1,13 @@
 version: '3.9'
 
 services:
-  frontend:
-    build: ./frontend
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend
-    ports:
-      - 5173:5173
-    environment:
-      - API_URL=web:8004
+  # frontend:
+  #   build: ./frontend
+  #   image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend
+  #   ports:
+  #     - 5173:5173
+  #   environment:
+  #     - API_URL=web:8004
 
   web:
     build: ./backend
@@ -84,16 +84,16 @@ services:
       POSTGRES_DB: ${DB_NAME}
     restart: always
 
-  ml-llm:
-    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml
-    build:
-      context: ./ml/
-    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
-    environment:
-      LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
-    volumes:
-      - ${ROOT_DIR}app:/root/.cache
-      - ${ROOT_DIR}app/models:/app/models
-    ports:
-      - 8002:7999
+  # ml-llm:
+  #   image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml
+  #   build:
+  #     context: ./ml/
+  #   command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
+  #   environment:
+  #     LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
+  #   volumes:
+  #     - ${ROOT_DIR}app:/root/.cache
+  #     - ${ROOT_DIR}app/models:/app/models
+  #   ports:
+  #     - 8002:7999
 

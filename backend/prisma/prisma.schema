@@ -18,6 +18,7 @@ model ModelRequest {
 model ModelResponse {
     id Int @id @default(autoincrement())
     request_id Int
+    response String?
     started_at      DateTime?
     finished_at     DateTime?
 }
