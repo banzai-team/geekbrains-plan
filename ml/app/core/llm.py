@@ -20,11 +20,8 @@ lm = models.LlamaCpp(MODEL_PATH,
                      n_batch=n_batch
                      )
 
-pipeline = transformers.pipeline(
-    "text-generation",
-    model=model_name_or_path,
-    model_kwargs={"torch_dtype": torch.bfloat16},
-    device=device,
+tokenizer = transformers.AutoTokenizer.from_pretrained(
+    model_name_or_path,
 )
 
 
@@ -39,7 +36,7 @@ def narrow(header: str, sample_text: str) -> dict[str, list[Any] | Any]:
     assistant_eos = '<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n'
     user_eos = '<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n'
 
-    prompt = pipeline.tokenizer.apply_chat_template(
+    prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=True
