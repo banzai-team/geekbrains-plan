@@ -27,34 +27,11 @@ const AddFormPage: React.FC = () => {
                 ]}
             />
             <Card>
-                <CardHeader className="pb-8">
+                <CardHeader className="pb-5">
                     <CardTitle>Форма добавления</CardTitle>
                     <CardDescription>Добавьте файл вакансии или ссылку на вакансию</CardDescription>
                 </CardHeader>
                 <AddVacancyForm onSubmit={onSubmitForm}/>
-                {/*<CardContent className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">*/}
-                {/*    <Input></Input>*/}
-                {/*    <Input></Input>*/}
-
-
-                {/*    /!*<FormItem>*!/*/}
-                {/*    /!*    <FormLabel>Username</FormLabel>*!/*/}
-                {/*    /!*    <FormControl>*!/*/}
-                {/*    /!*        <Input*!/*/}
-                {/*    /!*            placeholder="shadcn"*!/*/}
-                {/*    /!*        />*!/*/}
-                {/*        /!*</FormControl>*!/*/}
-                {/*        /!*<FormDescription>*!/*/}
-                {/*        /!*    This is your public display name.*!/*/}
-                {/*        /!*</FormDescription>*!/*/}
-                {/*        /!*<FormMessage />*!/*/}
-                {/*    /!*</FormItem>*!/*/}
-
-
-                {/*</CardContent>*/}
-                {/*<CardFooter className="justify-end">*/}
-                {/*    <Button>Добавить</Button>*/}
-                {/*</CardFooter>*/}
             </Card>
         </>
     );
