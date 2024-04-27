@@ -5,6 +5,7 @@ let url = "";
 
 // @ts-ignore
 const onClick = ()=> {
+    // @ts-ignore
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: any) => {
         url = tabs[0].url;
         console.log(url) // fix for npm run build
