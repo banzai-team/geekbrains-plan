@@ -23,6 +23,7 @@ celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
 
+
 @celery.task(name="create_text_workflow")
 def plan_for_text(text: str):
     return chain(text_extraction.s(text), model_invocation.s()).delay()
@@ -51,10 +52,12 @@ def pdf_extraction(file_path: str) -> str:
         "title": f"some_vacancy_from_pdf: {text}"
     })
 
+
 @celery.task(name="save_request")
 def save_request(): {
 
 }
+
 
 @celery.task(name="url_extraction")
 def url_extraction(url: str):
@@ -85,18 +88,19 @@ def model_invocation(vacancy_ser: str) -> int:
     response_to_save = prisma.prisma_client.modelresponse.create(response_to_save)
     response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
-    course = response.json().result
-    # course = json.dumps({"data": [0,1,2]})
-    prisma.prisma_client.modelresponse.update(where={
-        "id": response_to_save.id
-    },
-    data = {
-        "response": course,
-        "finished_at": datetime.datetime.now()
-    })
+    courses = response.json()["edu_courses"]
+    similar_courses = response.json()["simular_courses"]
 
-    print(course)
-    return f"model call result for vacancy {course[0]}"
+    prisma.prisma_client.modelresponse.update(
+        where={
+            "id": response_to_save.id
+        },
+        data={
+            "response": courses,
+            "finished_at": datetime.datetime.now()
+        })
+
+    return f"model call result for vacancy {courses[0]}"
 
 
 def custom_vacancy_decoder(vacancy_dict):
