@@ -90,7 +90,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
       </CardContent>
 
       <CardFooter className="justify-end">
-        <Button type="submit" disabled={!formik.values.link && !formik.values.files} loa>
+        <Button type="submit" disabled={!formik.values.link && !formik.values.files}>
           Добавить {formik.isSubmitting}
         </Button>
       </CardFooter>
