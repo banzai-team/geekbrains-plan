@@ -1,22 +1,22 @@
-name: Backend Python CI workflow
+name: ML Python CI workflow
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'backend/**'
-      - '.github/workflows/backend.yaml'
+      - 'ml/**'
+      - '.github/workflows/ml.yaml'
     branches:
       - main
   pull_request:
     paths:
-      - 'backend/**'
+      - 'ml/**'
 jobs:
   deploy-container:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend/
+        working-directory: ./ml/
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
@@ -25,8 +25,8 @@ jobs:
           YANDEX_AUTH_KEY: ${{ secrets.YANDEX_AUTH_KEY }}
       - run: |
           echo "Packaging docker image ..."
-          tag="$DOCKER_REGISTRY/geekbrains-backend:${{ github.sha }}"
+          tag="$DOCKER_REGISTRY/geekbrains-ml:${{ github.sha }}"
           docker build -t $tag -t latest .
-          docker push $tag --all-tags
+          docker push $DOCKER_REGISTRY/geekbrains-ml --all-tags
         env:
           DOCKER_REGISTRY: cr.yandex/crpq1hjt5vn1sf4s6j1b
