@@ -8,7 +8,7 @@ router = APIRouter(prefix="/v1")
 
 
 @router.post('/process',
-             description='Тест',
+             description='Запускает процесс обработки текста',
              tags=['Inference endpoints'],
              status_code=status.HTTP_200_OK,
              response_model=OutputCl)

@@ -1,12 +1,34 @@
 import React from "react";
 import Head from "~/components/Head";
 import Breadcrumbs from "~/components/Breadcrumbs";
-import {Routes} from "~/pages/Router";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "~/components/ui/card";
-import {Input} from "~/components/ui/input";
-import {Button} from "~/components/ui/button";
+import {Card, CardDescription, CardHeader, CardTitle} from "~/components/ui/card";
+import AddVacancyForm from "~/components/AddVacancyForm";
+import {uploadFile, uploadLink} from "~/domain/api";
+import {useMutation} from "react-query";
+import { Routes } from '~/pages/Router';
+import { useNavigate } from "react-router-dom";
+
 
 const AddFormPage: React.FC = () => {
+    const navigate = useNavigate();
+    const sendFile = useMutation(uploadFile, {
+        onSuccess: (data) => {
+            navigate(`${Routes.Vacancy}/${data.data.id}`);
+        }
+    });
+    const sendLink = useMutation(uploadLink, {
+        onSuccess: (data) => {
+            navigate(`${Routes.Vacancy}/${data.data.taskId}`);
+        }
+    });
+
+    const onSubmitForm = (data: { files?: any[], link?: string }) => {
+        if (data.files) {
+            sendFile.mutate({ file: data.files[0] });
+        } else {
+            sendLink.mutate(data)
+        }
+    }
     return (
         <>
             <Head title="Добавление вакансии" />
@@ -23,16 +45,11 @@ const AddFormPage: React.FC = () => {
                 ]}
             />
             <Card>
-                <CardHeader className="pb-2">
-                    <CardTitle>Ссылка</CardTitle>
-                    <CardDescription></CardDescription>
+                <CardHeader className="pb-5">
+                    <CardTitle>Форма добавления</CardTitle>
+                    <CardDescription>Добавьте ссылку на вакансию или файл вакансии</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <Input></Input>
-                </CardContent>
-                <CardFooter>
-                    <Button>Добавить</Button>
-                </CardFooter>
+                <AddVacancyForm onSubmit={onSubmitForm} />
             </Card>
         </>
     );

@@ -1,0 +1,1 @@
+prisma generate --schema ./../../backend/prisma/prisma.schema

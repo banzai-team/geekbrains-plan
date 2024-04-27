@@ -1,12 +1,13 @@
 import React, { lazy, Suspense } from 'react';
-import { Outlet, RouteObject, useRoutes, BrowserRouter } from 'react-router-dom';
+import { RouteObject, useRoutes, BrowserRouter } from 'react-router-dom';
 import MainView from '~/components/MainView';
 import { Spinner } from '~/components/ui/spinner';
+import {Card} from "~/components/ui/card";
 
 const Loading = () => (
-  <p className="p-4 w-full h-full text-center">
-    <Spinner />
-  </p>
+  <Card className="p-20 w-full h-full text-center mt-10 text-md flex flex-row gap-2 justify-center align-middle text-muted-foreground">
+    Загрузка <Spinner />
+  </Card>
 );
 
 const IndexScreen = lazy(() => import('~/pages/Index'));

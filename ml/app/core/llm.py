@@ -13,7 +13,8 @@ model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
 n_gpu_layers = 1  # Metal set to 1 is enough.
 n_batch = 512
-N_CTX = 4096
+
+N_CTX = 8192
 
 lm = models.LlamaCpp(
     MODEL_PATH,

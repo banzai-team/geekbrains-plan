@@ -3,29 +3,32 @@ version: '3.9'
 services:
   frontend:
     build: ./frontend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend
     ports:
       - 5173:5173
-    volumes:
-      - ./backend:/usr/src/app
     environment:
       - API_URL=web:8004
+
   web:
     build: ./backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
     ports:
-      - 8004:8000
+      - 4000:8000
     command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
-      - ./backend/app:/app/app
+      - ./tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - ML_SERVICE_URL=http://ml-llm:7999
     depends_on:
       - redis
       - db
 
   prisma-migrate:
     build: ./backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
     command: >
@@ -45,22 +48,27 @@ services:
 
   worker:
     build: ./backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
     command: celery -A app.worker.worker worker --loglevel=info
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - ML_SERVICE_URL=http://ml-llm:7999
+    volumes:
+            - ${ROOT_DIR}tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
 
   flower:
     build: ./backend
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend
     ports:
       - 5555:5555
     command: celery -A app.worker.worker flower --loglevel=info
-    volumes:
-      - ./backend:/usr/src/app
     environment:
+      - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
@@ -77,19 +85,17 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     restart: always
-#
-#  ml-llm:
-#    build:
-#      context: ./ml/
-#    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
-#    environment:
-#      LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
-#    volumes:
-#      - app:/root/.cache
-#      - /Users/jamakase/.ollama/models/blobs:/app/models
-#      - ./ml/app:/app/app
-#    ports:
-#      - 8002:8000
 
-volumes:
-  app:
+  ml-llm:
+    image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml
+    build:
+      context: ./ml/
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
+    environment:
+      LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
+    volumes:
+      - ${ROOT_DIR}app:/root/.cache
+      - ${ROOT_DIR}app/models:/app/models
+    ports:
+      - 8002:7999
+

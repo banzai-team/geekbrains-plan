@@ -2,7 +2,7 @@ from fastapi import FastAPI, status
 
 from app.apis import v1_router
 
-from .logger import logger
+from app.logger import logger
 
 app = FastAPI(title='ml service',
               description='Fastapi service for gk',

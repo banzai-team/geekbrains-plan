@@ -6,18 +6,74 @@ datasource db {
 // generator
 generator client {
   provider             = "prisma-client-py"
-  interface            = "asyncio"
+  interface            = "sync"
+  recursive_type_depth = 5
 }
 
 model ModelRequest {
     id              Int     @id @default(autoincrement())
-    request            String
     performed_at       DateTime
+    task_id  String?
+    source_type    String?
+    source         String?
+    req_text           String?
+    response ModelResponse?
+}
+
+model OutputClEduCourse {
+    id Int @id @default(autoincrement())
+    response_id Int
+    response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    program_id Int
+    program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model OutputClSimularCourse {
+    id Int @id @default(autoincrement())
+    response_id Int
+    response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    match_score Float
+    program_id Int
+    program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ModelResponse {
     id Int @id @default(autoincrement())
-    request_id Int
+    request_id Int @unique
+    request ModelRequest @relation(fields: [request_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     started_at      DateTime?
     finished_at     DateTime?
+    edu_courses OutputClEduCourse[]
+    simular_courses OutputClSimularCourse[]
+}
+
+model Program {
+    id Int @id
+    name String
+    speciality String?
+    url String?
+    tag String?
+    days_amount Int?
+    price Int?
+    difficulty String?
+    modules Module[]
+    quarters Quarter[]
+    edu_courses OutputClEduCourse[]
+    simular_courses OutputClSimularCourse[]
+}
+
+model Module {
+  id Int @id @default(autoincrement())
+  program_id Int 
+  program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  title String?
+  ordinal Int
+}
+
+model Quarter {
+  id Int @id @default(autoincrement())
+  program_id Int
+  program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  title String
+  ordinal Int
 }
