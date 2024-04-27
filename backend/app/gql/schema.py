@@ -65,7 +65,7 @@ class ModelRequest:
     source_type: Optional[str] = None
     performed_at: Optional[date] = None
     response: Optional[ModelResponse]
-
+    status: Optional[str]
 
 
 @strawberry.type
