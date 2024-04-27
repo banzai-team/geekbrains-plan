@@ -56,7 +56,7 @@ services:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
-            - ${ROOT_DIR}/tmp:/var/planning/uploads
+            - ${ROOT_DIR}tmp:/var/planning/uploads
     depends_on:
       - redis
       - db

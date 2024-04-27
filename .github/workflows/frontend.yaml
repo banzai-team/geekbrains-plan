@@ -34,7 +34,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          VITE_API_URL: http://api.geekbrains.banzai-predict.site:4000/api
+          VITE_API_URL: http://api.geekbrains.banzai-predict.site:4000
 
       - run: zip -qq -r build.zip dist
 

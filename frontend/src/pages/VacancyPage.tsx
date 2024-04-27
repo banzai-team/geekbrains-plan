@@ -5,11 +5,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import Head from '~/components/Head';
 import Breadcrumbs from '~/components/Breadcrumbs';
 import { Routes } from '~/pages/Router';
+import { getRequest } from "~/domain/api";
+import { useQuery } from "react-query";
 import {Clock, Wallet, BookHeart} from "lucide-react";
 import Progress from '~/components/Progress';
 
 const VacancyPage: React.FC = () => {
   const { id = '' } = useParams();
+
+  const request = useQuery(["request", id], () => getRequest(id));
 
   return (
     <>
