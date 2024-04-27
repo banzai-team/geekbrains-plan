@@ -31,13 +31,16 @@ const VacancyPage: React.FC = () => {
         ]}
       />
       <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5">
-        <Card className="row-start-1 row-end-4 sm:col-span-3 md:col-span-3 lg:col-span-2 xl:col-span-2" x-chunk="vacancy-chunk-0">
-          <CardHeader className="pb-2">
-            <CardTitle>Вакансия классная</CardTitle>
-            <CardDescription>VK</CardDescription>
-          </CardHeader>
-          <CardContent>data</CardContent>
-        </Card>
+        <div className="row-start-1 row-end-5 sm:col-span-3 md:col-span-3 lg:col-span-2 xl:col-span-2">
+          <Card className="" x-chunk="vacancy-chunk-0">
+            <CardHeader className="pb-2">
+              <CardTitle>Вакансия классная</CardTitle>
+              <CardDescription>VK</CardDescription>
+            </CardHeader>
+            <CardContent>data</CardContent>
+          </Card>
+        </div>
+
         <Card className="sm:col-span-3" x-chunk="vacancy-chunk-1">
           <CardHeader className="pb-2">
             <CardTitle>Курс самый прекрасный</CardTitle>
