@@ -19,7 +19,7 @@ function App() {
     <>
       <Button disabled={likeMutation.isLoading} variant="outline" onClick={() => likeMutation.mutateAsync()}>
         Like1:
-        {likeMutation.isLoading ? "Loading..." : likeMutation.isSuccess || "not yet called"}
+        {likeMutation.isLoading ? "Loading..." : likeMutation.isSuccess && "DONE" || "not yet called"}
       </Button>
     </>
   )
