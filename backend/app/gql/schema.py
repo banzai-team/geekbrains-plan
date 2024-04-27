@@ -16,11 +16,26 @@ class ModelResponse:
 
 
 @strawberry.type
+class OutputClEduCourse:
+    id: int
+    edu_course: int
+
+
+@strawberry.type
+class OutputClSimularCourse:
+    id: int
+    program_id: int
+    match_score: float
+
+
+@strawberry.type
 class ModelRequest:
     id: int
     request: Optional[str] = None
     performed_at: Optional[date] = None
     response: Optional[ModelResponse]
+    edu_courses: List[OutputClEduCourse]
+    simular_courses: List[OutputClSimularCourse]
 
 
 @strawberry.type
@@ -55,13 +70,19 @@ class Query:
     @strawberry.field()
     def model_requests(self) -> List[ModelRequest]:
         return prisma.prisma_client.modelrequest.find_many(include={
-            "response": True
+            "response": {
+                "edu_courses": True,
+                "simular_courses": True
+            }
         })
 
     @strawberry.field()
     def model_request(self, id: int) -> ModelRequest:
         return prisma.prisma_client.modelrequest.find_unique(where={"id": id}, include={
-            "response": True
+            "response": {
+                "edu_courses": True,
+                "simular_courses": True
+            }
         })
     
     @strawberry.field()

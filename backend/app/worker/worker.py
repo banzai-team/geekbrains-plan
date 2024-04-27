@@ -85,18 +85,41 @@ def model_invocation(vacancy_ser: str) -> int:
     response_to_save = prisma.prisma_client.modelresponse.create(response_to_save)
     response = requests.post(f"{ML_SERVICE_URL}/v1/process", json={'text': vacancy_ser})
 
-    course = response.json().result
+    course = response.json()
+    edu_courses = course["edu_courses"]
+    simular_courses = course["simular_courses"]
+
     # course = json.dumps({"data": [0,1,2]})
     prisma.prisma_client.modelresponse.update(where={
         "id": response_to_save.id
     },
     data = {
-        "response": course,
         "finished_at": datetime.datetime.now()
     })
 
-    print(course)
-    return f"model call result for vacancy {course[0]}"
+    for course in edu_courses:
+        course = prisma.prisma_client.outputcleducourse.create({
+            "edu_course": course,
+            "model_response": {
+                "connect": {
+                    "id": int(response_to_save.id)
+                }
+            }
+        })
+    
+    for simular_course in simular_courses:
+        course = prisma.prisma_client.outputclsimularcourse.create({
+            "match_score": simular_course["match_score"],
+            "program_id": simular_course["program_id"],
+            "model_response": {
+                "connect": {
+                    "id": int(response_to_save.id)
+                }
+            }
+        })
+
+
+    return f"model call result for vacancy {course}"
 
 
 def custom_vacancy_decoder(vacancy_dict):

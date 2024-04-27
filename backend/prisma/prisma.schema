@@ -17,13 +17,29 @@ model ModelRequest {
     response ModelResponse?
 }
 
+model OutputClEduCourse {
+    id Int @id @default(autoincrement())
+    response_id Int
+    model_response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    edu_course Int
+}
+
+model OutputClSimularCourse {
+    id Int @id @default(autoincrement())
+    response_id Int
+    model_response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    match_score Float
+    program_id Int
+}
+
 model ModelResponse {
     id Int @id @default(autoincrement())
     request_id Int @unique
     request ModelRequest @relation(fields: [request_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    response String?
     started_at      DateTime?
     finished_at     DateTime?
+    edu_courses OutputClEduCourse[]
+    simular_courses OutputClSimularCourse[]
 }
 
 model Program {
