@@ -51,7 +51,7 @@ function Index() {
           <CardTitle>Таблица с данными</CardTitle>
           <CardDescription>Отображение вакансия - курсы</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {data && data.length ? <Table data={data} /> : <Empty text="Ой! Кажется еще ничего нет" />}
         </CardContent>
       </Card>
