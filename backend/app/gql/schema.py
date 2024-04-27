@@ -8,38 +8,6 @@ from app.db import prisma
 
 
 
-
-@strawberry.type
-class OutputClEduCourse:
-    id: int
-    edu_course: int
-
-
-@strawberry.type
-class OutputClSimularCourse:
-    id: int
-    program_id: int
-    match_score: float
-
-
-@strawberry.type
-class ModelResponse:
-    id: int
-    response: Optional[str]
-    started_at: Optional[date]
-    finished_at: Optional[date]
-    edu_courses: Optional[List[OutputClEduCourse]]
-    simular_courses: Optional[List[OutputClSimularCourse]]
-
-@strawberry.type
-class ModelRequest:
-    id: int
-    source: Optional[str] = None
-    source_type: Optional[str] = None
-    performed_at: Optional[date] = None
-    response: Optional[ModelResponse]
-
-
 @strawberry.type
 class Module:
     id: int
@@ -65,6 +33,36 @@ class Program:
     quarter: Optional[Quarter]
 
 
+@strawberry.type
+class OutputClEduCourse:
+    id: int
+    program: Program
+
+
+@strawberry.type
+class OutputClSimularCourse:
+    id: int
+    program: Program
+    match_score: float
+
+
+@strawberry.type
+class ModelResponse:
+    id: int
+    response: Optional[str]
+    started_at: Optional[date]
+    finished_at: Optional[date]
+    edu_courses: Optional[List[OutputClEduCourse]]
+    simular_courses: Optional[List[OutputClSimularCourse]]
+
+@strawberry.type
+class ModelRequest:
+    id: int
+    source: Optional[str] = None
+    source_type: Optional[str] = None
+    performed_at: Optional[date] = None
+    response: Optional[ModelResponse]
+
 
 
 @strawberry.type
@@ -85,8 +83,26 @@ class Query:
         return prisma.prisma_client.modelrequest.find_unique(where={"id": id}, include={
             "response": {
                 "include": {
-                    "edu_courses": True,
-                    "simular_courses": True
+                    "edu_courses": {
+                        "include": {
+                            "program": {
+                                "include": {
+                                    "modules": True,
+                                    "quarters": True
+                                }
+                            }
+                        }
+                    },
+                    "simular_courses": {
+                        "include": {
+                            "program": {
+                                "include": {
+                                    "modules": True,
+                                    "quarters": True
+                                }
+                            }
+                        }
+                    }
                 }
             }
         })

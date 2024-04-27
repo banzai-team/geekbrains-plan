@@ -13,8 +13,10 @@ generator client {
 model ModelRequest {
     id              Int     @id @default(autoincrement())
     performed_at       DateTime
+    task_id  String?
     source_type    String?
     source         String?
+    req_text           String?
     response ModelResponse?
 }
 
@@ -22,7 +24,8 @@ model OutputClEduCourse {
     id Int @id @default(autoincrement())
     response_id Int
     response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    edu_course Int
+    program_id Int
+    program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model OutputClSimularCourse {
@@ -31,6 +34,7 @@ model OutputClSimularCourse {
     response ModelResponse @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
     match_score Float
     program_id Int
+    program Program @relation(fields: [program_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ModelResponse {
@@ -54,6 +58,8 @@ model Program {
     difficulty String?
     modules Module[]
     quarters Quarter[]
+    edu_courses OutputClEduCourse[]
+    simular_courses OutputClSimularCourse[]
 }
 
 model Module {
