@@ -2,8 +2,7 @@ from fastapi import FastAPI, status
 
 from app.apis import v1_router
 
-import logging
-
+from .logger import logger
 
 app = FastAPI(title='ml service',
               description='Fastapi service for gk',
@@ -11,7 +10,7 @@ app = FastAPI(title='ml service',
 
 # Adding v1 namespace route
 app.include_router(v1_router)
-logging.info('router add succeed')
+logger.info('router add succeed')
 
 
 @app.get('/health',

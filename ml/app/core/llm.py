@@ -1,38 +1,32 @@
-from guidance import models, select, gen
-import guidance
-import re
-
-import transformers
 import torch
-from transformers import BitsAndBytesConfig
-
-from .dict import courses_grouped
-
+import transformers
 import yaml
+from guidance import models, select
+
 from app.config import device, MODEL_PATH
+from .dict import courses_grouped
 
 data = yaml.safe_load(courses_grouped)
 
 model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
-lm = models.LlamaCpp(MODEL_PATH)
-
-model = models.Transformers(
-    model_name_or_path,
-    device_map="auto",
-    quantization_config=BitsAndBytesConfig(load_in_8bit=True),
-    _attn_implementation='sdpa'
-)
+n_gpu_layers = 1  # Metal set to 1 is enough.
+n_batch = 512
+lm = models.LlamaCpp(MODEL_PATH,
+                     n_gpu_layers=n_gpu_layers,
+                     n_ctx=4096,
+                     n_batch=n_batch
+                     )
 
 pipeline = transformers.pipeline(
     "text-generation",
-    model=model,
+    model=model_name_or_path,
     model_kwargs={"torch_dtype": torch.bfloat16},
     device=device,
 )
 
 
-def narrow(header: str, sample_text: str):
+def narrow(header: str, sample_text: str) -> list[int]:
     messages = [
         {"role": "system",
          "content": "Ты очень полезный ассистен, который помогает подбирать кадры для IT компании и не только"},
@@ -78,4 +72,5 @@ def narrow(header: str, sample_text: str):
         level_d = level_d[choosen_index].get('children')
         level_idx += 1
 
-    return result_edu_course
+    print(result_edu_course)
+    return [0]
