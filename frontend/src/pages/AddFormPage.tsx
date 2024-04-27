@@ -29,7 +29,7 @@ const AddFormPage: React.FC = () => {
             <Card>
                 <CardHeader className="pb-5">
                     <CardTitle>Форма добавления</CardTitle>
-                    <CardDescription>Добавьте файл вакансии или ссылку на вакансию</CardDescription>
+                    <CardDescription>Добавьте ссылку на вакансию или файл вакансии</CardDescription>
                 </CardHeader>
                 <AddVacancyForm onSubmit={onSubmitForm}/>
             </Card>
