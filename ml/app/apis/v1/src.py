@@ -8,10 +8,10 @@ router = APIRouter(prefix="/v1")
 
 
 @router.post('/process',
-             description='Тест',
+             description='Запускает процесс обработки текста',
              tags=['Inference endpoints'],
              status_code=status.HTTP_200_OK,
              response_model=OutputCl)
 def sum_(input_: InputCl) -> OutputCl:
-    narrow(header="", sample_text=input_.text)
-    return OutputCl(result=[])
+    llm_result = narrow(header="", sample_text=input_.text)
+    return OutputCl(**llm_result)

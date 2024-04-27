@@ -1,21 +1,21 @@
 version: '3.9'
 
 services:
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - 5173:5173
-  #   volumes:
-  #     - ./backend:/usr/src/app
-  #   environment:
-  #     - API_URL=web:8004
+  frontend:
+    build: ./frontend
+    ports:
+      - 5173:5173
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      - API_URL=web:8004
   web:
     build: ./backend
     ports:
       - 8004:8000
-    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend/app:/app/app
       - ./tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -39,8 +39,8 @@ services:
     restart: always
     ports:
       - '6379:6379'
-#    volumes:
-#      - ./cache:/data
+    #    volumes:
+    #      - ./cache:/data
     environment:
       REDIS_PORT: 6379
 
@@ -78,18 +78,21 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     restart: always
-#
-#  ml-llm:
-#    build:
-#      context: ./ml/
-#    environment:
-#      LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
-#    volumes:
-#      - /Users/jamakase/.ollama/models/blobs:/app/models
-##      -
-#    ports:
-#      - 8002:8080
+
+  ml-llm:
+    build:
+      context: ./ml/
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    environment:
+      LLAMA_MODEL_PATH: "/app/models/sha256-2609048d349e7c70196401be59bea7eb89a968d4642e409b0e798b34403b96c8"
+    volumes:
+      - app:/root/.cache
+      - /Users/jamakase/.ollama/models/blobs:/app/models
+      - ./ml/app:/app/app
+    ports:
+      - 8002:8000
 
 volumes:
+  app:
   tmp:
     external: true

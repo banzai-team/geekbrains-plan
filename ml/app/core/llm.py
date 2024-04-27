@@ -1,38 +1,31 @@
-from guidance import models, select, gen
-import guidance
-import re
+from typing import Dict, List, Any
 
-import transformers
 import torch
-from transformers import BitsAndBytesConfig
-
-from .dict import courses_grouped
-
+import transformers
 import yaml
+from guidance import models, select
+
 from app.config import device, MODEL_PATH
+from .dicts import courses_grouped, SIMULAR_COURSES
 
 data = yaml.safe_load(courses_grouped)
 
 model_name_or_path = "NousResearch/Meta-Llama-3-8B-Instruct"
 # model_name_or_path = "NousResearch/Meta-Llama-3-70B-Instruct"
-lm = models.LlamaCpp(MODEL_PATH)
+n_gpu_layers = 1  # Metal set to 1 is enough.
+n_batch = 2048
+lm = models.LlamaCpp(MODEL_PATH,
+                     n_gpu_layers=n_gpu_layers,
+                     n_ctx=4096,
+                     n_batch=n_batch
+                     )
 
-model = models.Transformers(
+tokenizer = transformers.AutoTokenizer.from_pretrained(
     model_name_or_path,
-    device_map="auto",
-    quantization_config=BitsAndBytesConfig(load_in_8bit=True),
-    _attn_implementation='sdpa'
-)
-
-pipeline = transformers.pipeline(
-    "text-generation",
-    model=model,
-    model_kwargs={"torch_dtype": torch.bfloat16},
-    device=device,
 )
 
 
-def narrow(header: str, sample_text: str):
+def narrow(header: str, sample_text: str) -> dict[str, list[Any] | Any]:
     messages = [
         {"role": "system",
          "content": "Ты очень полезный ассистен, который помогает подбирать кадры для IT компании и не только"},
@@ -43,7 +36,7 @@ def narrow(header: str, sample_text: str):
     assistant_eos = '<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n'
     user_eos = '<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n'
 
-    prompt = pipeline.tokenizer.apply_chat_template(
+    prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=True
@@ -53,11 +46,8 @@ def narrow(header: str, sample_text: str):
     level_d = data['children']
     level_idx = 0
     output = lm + prompt
-    result_edu_course = None
 
     while True:
-
-        message = ""
         message = f"Напиши номер категории, к которой вакансия относится больше всего:\n"
         for i in range(1, len(level_d) + 1):
             message += f'{i}. ' + level_d[i - 1]['name']
@@ -70,12 +60,18 @@ def narrow(header: str, sample_text: str):
 
         choosen_index = int(output[f'level_{level_idx}']) - 1
 
-        #     if
         if not level_d[choosen_index].get('children'):
-            result_edu_course = level_d[choosen_index]['name']
+            result_edu_course = level_d[choosen_index]['id']
             break
 
         level_d = level_d[choosen_index].get('children')
         level_idx += 1
 
-    return result_edu_course
+    print(result_edu_course)
+
+    sm = SIMULAR_COURSES.get(result_edu_course, {}).get('simular', [])
+
+    return {
+        'simular_courses': sm,
+        'edu_courses': [int(result_edu_course)]
+    }

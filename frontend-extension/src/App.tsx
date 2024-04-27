@@ -1,26 +1,28 @@
 import './App.css'
-import {Button} from "~/components/ui/button";
+import { Button } from "~/components/ui/button";
+import { likeVacancy } from "~/domain/api.tsx";
+import { useMutation } from "react-query";
 
 let url = "";
 
-// @ts-ignore
-const onClick = ()=> {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs: any) => {
-        url = tabs[0].url;
-        console.log(url) // fix for npm run build
-        // use `url` here inside the callback because it's asynchronous!
-        alert('Successfully added to favorites!');
-    });
-}
+chrome?.tabs?.query({ active: true, lastFocusedWindow: true }, async (tabs: any) => {
+  url = tabs[0].url;
+});
 
 function App() {
-    return (
-        <>
-            <Button variant="outline" onClick={onClick}>
-                Like
-            </Button>
-        </>
-    )
+  // @ts-ignore
+  const vacancyHandler = async () => likeVacancy(url)
+
+  const likeMutation = useMutation(() => vacancyHandler());
+
+  return (
+    <>
+      <Button disabled={likeMutation.isLoading} variant="outline" onClick={() => likeMutation.mutateAsync()}>
+        Like1:
+        {likeMutation.isLoading ? "Loading..." : likeMutation.isSuccess || "not yet called"}
+      </Button>
+    </>
+  )
 }
 
 export default App
