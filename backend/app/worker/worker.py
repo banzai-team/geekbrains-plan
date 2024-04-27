@@ -53,6 +53,10 @@ def pdf_extraction(request_id, file_path: str) -> str:
         for page in pages:
             text += page.page_content
 
+        prisma.prisma_client.modelrequest.update(where={"id": request_id}, data={
+            "extracted_text": text,
+        })
+
         logger.debug(f"extracted text from {file_path}: {text}")
 
         return json.dumps({
@@ -77,6 +81,10 @@ def url_extraction(request_id, url: str):
 
     try:
         extracted_text = parse_html(url)
+
+        prisma.prisma_client.modelrequest.update(where={"id": request_id}, data={
+            "extracted_text": extracted_text,
+        })
         return json.dumps({
             "request_id": request_id,
             "text": extracted_text

@@ -19,6 +19,7 @@ model ModelRequest {
     req_text           String?
     response ModelResponse?
     status String?
+    extracted_text String?
 }
 
 model OutputClEduCourse {

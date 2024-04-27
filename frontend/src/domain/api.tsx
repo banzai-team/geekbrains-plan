@@ -9,7 +9,9 @@ const ModelsQuery = gql`
         modelRequests {
             id
             performedAt
+            courseCoverage
             response {
+                courseCoverage
                 eduCourses {
                     id
                     program {
@@ -54,7 +56,9 @@ const ModelQuery = gql`
         modelRequest(id: $id) {
             id
             performedAt
+            extractedText
             response {
+                courseCoverage
                 eduCourses {
                     id
                     program {

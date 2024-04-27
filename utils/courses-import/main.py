@@ -54,8 +54,8 @@ if __name__ == "__main__":
         }
 
         if program_id in prices:
-            to_save["price"] = prices["program_price"]
-            to_save["days_amount"] = prices["days_amount"]
+            to_save["price"] = prices[program_id]["program_price"]
+            to_save["days_amount"] = prices[program_id]["days_amount"]
 
         res = prisma.prisma_client.program.create(to_save)
         if program_id in modules:
