@@ -9,9 +9,7 @@ const ModelsQuery = gql`
         modelRequests {
             id
             performedAt
-            courseCoverage
             response {
-                courseCoverage
                 eduCourses {
                     id
                     program {
@@ -58,7 +56,6 @@ const ModelQuery = gql`
             performedAt
             extractedText
             response {
-                courseCoverage
                 eduCourses {
                     id
                     program {
@@ -94,6 +91,7 @@ const ModelQuery = gql`
             }
             source
             sourceType
+            extractedText
         }
     }
 `;

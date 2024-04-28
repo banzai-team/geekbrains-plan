@@ -17,7 +17,7 @@ const VacancyPage: React.FC = () => {
 
   const request = useQuery(["request", id], () => getRequest(id), { refetchInterval: 3000 });
 
-  if (!request.isFetched) {
+  if (!request.isFetched || !request?.data?.response) {
     return (
         <Card className="p-20 w-full h-full text-center mt-10 text-md flex flex-row gap-2 justify-center align-middle text-muted-foreground">
           Загрузка <Spinner />
@@ -62,9 +62,13 @@ const VacancyPage: React.FC = () => {
             <Card className="" x-chunk="vacancy-chunk-0">
               <CardHeader className="pb-2">
               <CardTitle>Описание вакансии</CardTitle>
-              {/* <CardDescription>VK</CardDescription> */}
+              <CardDescription>
+                  <a rel="noreferrer" href={request.data.source} target="_blank" className="flex flex-row items-center gap-2 hover:text-primary">
+                      Перейти к вакансии <MoveRight className="h-4 w-4" />
+                  </a>
+              </CardDescription>
             </CardHeader>
-            <CardContent>data</CardContent>
+            <CardContent>{request.data.extractedText}</CardContent>
           </Card>
         </div>
 

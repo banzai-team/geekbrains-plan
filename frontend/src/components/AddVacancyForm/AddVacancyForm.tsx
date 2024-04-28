@@ -26,7 +26,10 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
       link: '',
       files: null,
     },
-    onSubmit: async (values) => onSubmit(values),
+    onSubmit: async (values, {setSubmitting}) => {
+      setSubmitting(true);
+      onSubmit(values);
+    },
     // validationSchema,
   });
 
@@ -91,7 +94,7 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
 
       <CardFooter className="justify-end">
         <Button type="submit" disabled={(!formik.values.link && !formik.values.files) || formik.isSubmitting}>
-          Добавить {formik.isSubmitting}
+          Добавить
         </Button>
       </CardFooter>
     </form>
