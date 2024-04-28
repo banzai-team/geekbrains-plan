@@ -1,7 +1,12 @@
 # О проекте
 
 # Как развернуть проект
-Чтобы протестировать локально, достаточно запустить
+Чтобы протестировать локально, достаточно загрузить модель и запустить
+
+Загрузка модели
+```bash
+wget https://huggingface.co/NousResearch/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf ./app/models
+```
 
 ``make up``
 
