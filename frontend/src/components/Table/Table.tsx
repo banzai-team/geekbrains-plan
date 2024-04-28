@@ -51,17 +51,17 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
       </TableHeader>
       <TableBody>
         {data.map((item) => (
-          <TableRow onClick={() => onRowClick(item.id)} key={`table-row-${item.id}`} className="text-left">
+          <TableRow onClick={() => onRowClick(item?.id)} key={`table-row-${item?.id}`} className="text-left">
             <TableCell className="max-w-40 overflow-hidden text-ellipsis whitespace-nowrap">
               <a
                   onClick={(event) => {
                     event.stopPropagation();
                   }}
-                  href={item.source}
+                  href={item?.source}
                   target="_blank"
                   className="font-medium hover:text-primary"
               >
-                {item.sourceType === 'pdf' ? <File /> : item.source}
+                {item?.sourceType === 'pdf' ? <File /> : item?.source}
                 </a>
             </TableCell>
             <TableCell className="max-w-48 w-max overflow-hidden text-ellipsis whitespace-nowrap">
@@ -69,29 +69,29 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
                   onClick={(event) => {
                     event.stopPropagation();
                   }}
-                  href={item.response?.eduCourses[0]?.program?.url}
+                  href={item?.response?.eduCourses[0]?.program?.url}
                   target="_blank"
                   className="font-medium hover:text-primary"
               >
-                {item.response?.eduCourses[0]?.program?.name}
+                {item?.response?.eduCourses[0]?.program?.name}
               </a>
             </TableCell>
             <TableCell>
-              {item.response?.eduCourses[0]?.program?.tag}
+              {item?.response?.eduCourses[0]?.program?.tag}
             </TableCell>
             <TableCell>
-              {item.response?.eduCourses[0]?.program?.difficulty}
+              {item?.response?.eduCourses[0]?.program?.difficulty}
             </TableCell>
             <TableCell className="w-20">
-              {new Date(item.performedAt).toLocaleDateString("ru-RU")}
+              {new Date(item?.performedAt)?.toLocaleDateString("ru-RU")}
             </TableCell>
             <TableCell className="w-36 max-w-48 whitespace-nowrap text-center">
-              <Badge className="text-xs" variant={!item.source ? 'destructive' : item.response?.eduCourses?.length ? 'default' : 'secondary'}>
-                {!item.source ? 'Ошибка' : item.response?.eduCourses?.length ? 'Готово' : 'В процессе'}
+              <Badge className="text-xs" variant={!item?.source ? 'destructive' : item?.response?.eduCourses?.length ? 'default' : 'secondary'}>
+                {!item?.source ? 'Ошибка' : item?.response?.eduCourses?.length ? 'Готово' : 'В процессе'}
               </Badge>
             </TableCell>
             <TableCell className="text-right w-10">
-              <Button variant="ghost" size="sm" onClick={(e) => onDelete(e, item.id)}>
+              <Button variant="ghost" size="sm" onClick={(e) => onDelete(e, item?.id)}>
                 <Trash2 className="w-4 h-4 text-destructive" />
               </Button>
             </TableCell>
