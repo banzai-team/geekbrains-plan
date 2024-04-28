@@ -5,18 +5,19 @@ services:
     build: ./frontend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-frontend:${VERSION}
     ports:
-      - 5173:5173
+      - 80:80
     environment:
-      - API_URL=web:8004
+      API_URL: http://localhost:4000
 
   web:
+    restart: always
     build: ./backend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     ports:
       - 4000:8000
-    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - ${ROOT_DIR}/app/tmp:/var/planning/uploads
+      - ${ROOT_DIR}app/tmp:/var/planning/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -45,8 +46,9 @@ services:
     #      - ./cache:/data
     environment:
       REDIS_PORT: 6379
-
+#
   worker:
+    restart: always
     build: ./backend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     command: celery -A app.worker.worker worker --loglevel=info
@@ -56,12 +58,13 @@ services:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - ML_SERVICE_URL=http://ml-llm:7999
     volumes:
-      - ${ROOT_DIR}tmp:/var/planning/uploads
+      - ${ROOT_DIR}app/tmp:/var/planning/uploads
     depends_on:
       - redis
       - db
 
   flower:
+    restart: always
     build: ./backend
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-backend:${VERSION}
     ports:
@@ -84,13 +87,16 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ${ROOT_DIR}app/db:/var/lib/postgresql/data
     restart: always
 
   ml-llm:
     image: cr.yandex/crpq1hjt5vn1sf4s6j1b/geekbrains-ml:${VERSION}
+    restart: always
     build:
       context: ./ml/
-    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999", "--reload" ]
+    command: [ "uvicorn","app.main:app", "--host", "0.0.0.0", "--port", "7999"]
     environment:
       LLAMA_MODEL_PATH: "/app/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
     volumes:

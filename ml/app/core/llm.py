@@ -4,6 +4,7 @@ import torch
 import transformers
 import yaml
 from guidance import models, select
+from transformers import is_bitsandbytes_available
 
 from app.config import device, MODEL_PATH
 from .dicts import COURSES_GROUPED, SIMULAR_COURSES, PROGRAM_SKILLS, EDU_PROGRAMS
@@ -16,11 +17,12 @@ n_batch = 512
 
 N_CTX = 8192
 
-lm = models.LlamaCpp(
-    MODEL_PATH,
-    n_gpu_layers=n_gpu_layers,
-    n_ctx=N_CTX,
-    n_batch=n_batch
+lm = models.Transformers(
+    model_name_or_path,
+    device_map="auto",
+    load_in_8bit=is_bitsandbytes_available(),
+    _attn_implementation='sdpa',
+    echo=False
 )
 MIN_RATING = 1
 MAX_RATING = 9
