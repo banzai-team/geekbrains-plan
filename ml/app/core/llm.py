@@ -17,12 +17,18 @@ n_batch = 512
 
 N_CTX = 8192
 
-lm = models.Transformers(
-    model_name_or_path,
-    device_map="auto",
-    load_in_8bit=is_bitsandbytes_available(),
-    _attn_implementation='sdpa',
-    echo=False
+# lm = models.Transformers(
+#     model_name_or_path,
+#     device_map="auto",
+#     load_in_8bit=is_bitsandbytes_available(),
+#     _attn_implementation='sdpa',
+#     echo=False
+# )
+lm = models.LlamaCpp(
+    MODEL_PATH,
+    n_gpu_layers=n_gpu_layers,
+    n_ctx=N_CTX,
+    n_batch=n_batch
 )
 MIN_RATING = 1
 MAX_RATING = 9
