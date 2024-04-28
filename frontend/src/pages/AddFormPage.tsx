@@ -27,12 +27,17 @@ const AddFormPage: React.FC = () => {
         }
     });
 
-    const onSubmitForm = (data: { files?: any[], link?: string }) => {
+    const onSubmitForm = async (data: { files?: any[], link?: string }) => {
         if (data.files) {
-            sendFile.mutate({ file: data.files[0] });
+            await sendFile.mutateAsync({ file: data.files[0] });
         } else {
-            sendLink.mutate(data)
+            await sendLink.mutateAsync(data)
         }
+
+        // await new Promise((resolve) => setTimeout(() => {
+        //     console.log("yessss");
+        //     resolve(0);
+        // }, 1500));
     }
     return (
         <>

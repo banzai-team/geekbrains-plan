@@ -5,9 +5,10 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import Dropzone from "~/components/Dropzone";
 import {FileCheck2, X} from "lucide-react";
+import {Spinner} from "~/components/ui/spinner";
 
 type AddVacancyFormProps = {
-  onSubmit: (values: { link?: string; files?: any }) => void;
+  onSubmit: (values: { link?: string; files?: any }) => Promise<any>;
 };
 
 const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
@@ -28,11 +29,13 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
     },
     onSubmit: async (values, {setSubmitting}) => {
       setSubmitting(true);
-      onSubmit(values);
+      await onSubmit(values);
+      // setSubmitting(false);
     },
     // validationSchema,
   });
 
+  console.log(formik.isSubmitting);
   return (
     <form onSubmit={formik.handleSubmit}>
       <CardContent className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -93,9 +96,15 @@ const AddVacancyForm: React.FC<AddVacancyFormProps> = ({ onSubmit }) => {
       </CardContent>
 
       <CardFooter className="justify-end">
-        <Button type="submit" disabled={(!formik.values.link && !formik.values.files) || formik.isSubmitting}>
-          Добавить
-        </Button>
+        {
+          formik.isSubmitting
+              ? <Spinner className="my-1" />
+              : (
+                  <Button type="submit" disabled={!formik.values.link && !formik.values.files}>
+                    Добавить
+                  </Button>
+              )
+        }
       </CardFooter>
     </form>
   );
