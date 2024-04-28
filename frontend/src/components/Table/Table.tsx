@@ -86,8 +86,8 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
               {new Date(item.performedAt).toLocaleDateString("ru-RU")}
             </TableCell>
             <TableCell className="w-36 max-w-48 whitespace-nowrap text-center">
-              <Badge className="text-xs" variant={item.response?.eduCourses?.length ? 'default' : 'secondary'}>
-                {item.response?.eduCourses?.length ? 'Готово' : 'В процессе'}
+              <Badge className="text-xs" variant={!item.source ? 'destructive' : item.response?.eduCourses?.length ? 'default' : 'secondary'}>
+                {!item.source ? 'Ошибка' : item.response?.eduCourses?.length ? 'Готово' : 'В процессе'}
               </Badge>
             </TableCell>
             <TableCell className="text-right w-10">
