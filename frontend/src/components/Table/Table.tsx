@@ -4,17 +4,19 @@ import { useNavigate } from 'react-router';
 import { Badge } from '~/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
 import { Routes } from '~/pages/Router';
-import { Trash2 } from 'lucide-react';
+import {File, Trash2} from 'lucide-react';
 import { Button } from '~/components/ui/button';
 
 {
   /*TODO: check real data*/
 }
+
 type TableRow = {
   id: string;
-  vacancy: string;
-  vacancyLink: string;
-  price: string;
+  source: string;
+  sourceType: "pdf" | "url"
+  response: any;
+  performedAt: string;
   status: string;
 };
 
@@ -39,40 +41,62 @@ const MainTable: React.FC<MainTableProps> = ({ data }) => {
   return (
     <Table>
       <TableHeader>
-        <TableHead>Вакансия</TableHead>
-        <TableHead className="hidden sm:table-cell">Статус</TableHead>
-        <TableHead className="text-right">Цена</TableHead>
+        <TableHead className="text-left">Вакансия</TableHead>
+        <TableHead className="text-left">Курс</TableHead>
+        <TableHead className="text-left">Направление</TableHead>
+        <TableHead className="text-left">Уровень</TableHead>
+        <TableHead className="text-left">Дата</TableHead>
+        <TableHead className="text-left">Работа модели</TableHead>
         <TableHead className="text-right" />
       </TableHeader>
       <TableBody>
         {data.map((item) => (
-          <TableRow onClick={() => onRowClick(item.id)} key={`table-row-${item.id}`}>
-            <TableCell>
+          <TableRow onClick={() => onRowClick(item.id)} key={`table-row-${item.id}`} className="text-left">
+            <TableCell className="max-w-40 overflow-hidden text-ellipsis whitespace-nowrap">
               <a
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
-                href={item.vacancyLink}
-                target="_blank"
-                className="font-medium hover:text-primary"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  href={item.source}
+                  target="_blank"
+                  className="font-medium hover:text-primary"
               >
-                {item.vacancy}
+                {item.sourceType === 'pdf' ? <File /> : item.source}
+                </a>
+            </TableCell>
+            <TableCell className="max-w-48 w-max overflow-hidden text-ellipsis whitespace-nowrap">
+              <a
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  href={item.response?.eduCourses[0]?.program?.url}
+                  target="_blank"
+                  className="font-medium hover:text-primary"
+              >
+                {item.response?.eduCourses[0]?.program?.name}
               </a>
             </TableCell>
-            <TableCell className="hidden sm:table-cell">
-              {/*TODO: FIX variant if we will have status*/}
-              <Badge className="text-xs" variant={item.status === 'Done' ? 'default' : 'secondary'}>
-                {item.status}
+            <TableCell>
+              {item.response?.eduCourses[0]?.program?.tag}
+            </TableCell>
+            <TableCell>
+              {item.response?.eduCourses[0]?.program?.difficulty}
+            </TableCell>
+            <TableCell className="w-20">
+              {new Date(item.performedAt).toLocaleDateString("ru-RU")}
+            </TableCell>
+            <TableCell className="w-36 max-w-48 whitespace-nowrap text-center">
+              <Badge className="text-xs" variant={item.response?.eduCourses?.length ? 'default' : 'secondary'}>
+                {item.response?.eduCourses?.length ? 'Готово' : 'В процессе'}
               </Badge>
             </TableCell>
-            <TableCell className="text-right">{item.price}</TableCell>
-            <TableCell className="text-right">
+            <TableCell className="text-right w-10">
               <Button variant="ghost" size="sm" onClick={(e) => onDelete(e, item.id)}>
                 <Trash2 className="w-4 h-4 text-destructive" />
               </Button>
             </TableCell>
           </TableRow>
-        ))}
+        )).reverse()}
       </TableBody>
     </Table>
   );
