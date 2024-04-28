@@ -127,7 +127,7 @@ const VacancyPage: React.FC = () => {
             </CardDescription>
               {
                   mainCourse ? (
-                      <CardTitle className="text-4xl text-primary">{mainCourse.price} &#8381;</CardTitle>
+                      <CardTitle className="text-4xl text-primary">{mainCourse.price || "4 049"} &#8381;</CardTitle>
                   ) : <Spinner className="my-5" />
               }
           </CardHeader>
@@ -143,7 +143,7 @@ const VacancyPage: React.FC = () => {
             </CardDescription>
               {
                   mainCourse ? (
-                      <CardTitle className="text-4xl text-primary">{mainCourse.daysAmount}</CardTitle>
+                      <CardTitle className="text-4xl text-primary">{mainCourse.daysAmount || "9 месяцев"}</CardTitle>
                   ) : <Spinner className="my-5" />
               }
           </CardHeader>
@@ -160,7 +160,7 @@ const VacancyPage: React.FC = () => {
           </CardHeader>
             {
                 mainCourse ? (
-                    <CardContent className="pb-4 pt-2"><Progress progress={0.90} /></CardContent>
+                    <CardContent className="pb-4 pt-2"><Progress progress={request?.data?.response?.courseCoverage} /></CardContent>
                 ) : <Spinner className="my-5" />
             }
         </Card>

@@ -56,6 +56,7 @@ const ModelQuery = gql`
             performedAt
             extractedText
             response {
+                courseCoverage
                 eduCourses {
                     id
                     program {

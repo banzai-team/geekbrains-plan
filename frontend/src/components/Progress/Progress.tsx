@@ -24,7 +24,7 @@ const Progress: React.FC<{progress: number}> = ({progress}) => {
                 strokeDasharray={`${strokeDasharray}, ${circumference - strokeDasharray}`}
             />
         </svg>
-            <div className="text-xl absolute top-6 w-full text-center text-muted-foreground">{progress * 100}%</div>
+            <div className="text-xl absolute top-6 w-full text-center text-muted-foreground">{Math.round(progress * 100)}%</div>
         </div>
     );
 }
